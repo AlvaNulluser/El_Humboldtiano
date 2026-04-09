@@ -112,3 +112,61 @@ hr {
     background: #ccc;
     margin: 20px 0;
 }
+
+/* --- ESTILOS NUEVOS PARA LOS ARTÍCULOS INDIVIDUALES --- */
+
+/* Centramos el contenido y lo hacemos un poco más angosto para facilitar la lectura */
+.contenedor-articulo {
+    max-width: 800px; 
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.titulo-articulo {
+    font-size: 2.8rem;
+    color: var(--uah-azul);
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.autor-articulo {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.imagen-articulo {
+    width: 100%;
+    height: auto;
+    border-bottom: 4px solid var(--uah-amarillo);
+    margin-bottom: 25px;
+}
+
+/* Diseño cómodo para los párrafos de lectura larga */
+.cuerpo-articulo p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: var(--texto-oscuro);
+    text-align: justify;
+}
+
+/* Estilo del botón de retorno */
+.boton-volver {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 10px 20px;
+    background-color: var(--uah-azul);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.boton-volver:hover {
+    background-color: var(--uah-amarillo);
+    color: var(--texto-oscuro);
+}
