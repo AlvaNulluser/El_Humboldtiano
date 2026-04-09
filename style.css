@@ -1,0 +1,114 @@
+/* Configuraciones generales y paleta de colores UAH */
+:root {
+    --uah-azul: #003366; /* Azul institucional */
+    --uah-amarillo: #FFB300; /* Amarillo/Dorado institucional */
+    --texto-oscuro: #333333;
+    --fondo-claro: #F9F9F9;
+}
+
+body {
+    font-family: 'Merriweather', serif; /* Fuente estilo NYT */
+    background-color: var(--fondo-claro);
+    color: var(--texto-oscuro);
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos del encabezado */
+.encabezado {
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 4px double var(--texto-oscuro);
+}
+
+.titulo-principal {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 10px 0;
+    color: var(--uah-azul);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.fecha, .edicion {
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+}
+
+/* Barra de navegación */
+.navegacion {
+    background-color: var(--uah-azul);
+    padding: 10px 0;
+    border-bottom: 4px solid var(--uah-amarillo);
+}
+
+.navegacion ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.navegacion a {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.navegacion a:hover {
+    color: var(--uah-amarillo);
+}
+
+/* Grilla del periódico (Sistema de columnas) */
+.contenedor-noticias {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Dos columnas: la primera más ancha que la segunda */
+    gap: 40px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Estilos de las noticias */
+.noticia-destacada h2 {
+    font-size: 2.5rem;
+    margin-top: 0;
+    color: var(--uah-azul);
+}
+
+.noticia-destacada img {
+    width: 100%;
+    height: auto;
+    border-bottom: 3px solid var(--uah-amarillo);
+    margin-bottom: 15px;
+}
+
+.noticia-destacada p, .noticia-corta p {
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+.noticia-corta h3 {
+    font-size: 1.5rem;
+    margin-top: 0;
+}
+
+.leer-mas {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--uah-azul);
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: 2px solid var(--uah-amarillo);
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin: 20px 0;
+}
