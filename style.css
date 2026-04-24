@@ -170,3 +170,48 @@ hr {
     background-color: var(--uah-amarillo);
     color: var(--texto-oscuro);
 }
+
+@media (max-width: 768px) {
+    
+    /* 1. Ajustes del Encabezado */
+    .titulo-principal {
+        font-size: 2.2rem; /* Achicamos el título del periódico */
+        letter-spacing: 1px;
+    }
+
+    .encabezado {
+        padding: 20px 10px;
+    }
+
+    /* 2. Ajustes del Menú de Navegación */
+    .navegacion ul {
+        flex-direction: column; /* Apilamos los botones uno debajo del otro */
+        gap: 15px;
+        padding: 15px 0;
+    }
+
+    /* 3. Ajustes de la Grilla de Noticias (Portada) */
+    .contenedor-noticias {
+        grid-template-columns: 1fr; /* Cambiamos a UNA sola columna */
+        gap: 30px;
+        margin: 20px auto;
+    }
+
+    .noticia-destacada h2 {
+        font-size: 2rem;
+    }
+
+    /* 4. Ajustes del Artículo Individual (Plantilla) */
+    .titulo-articulo {
+        font-size: 2rem; /* Achicamos el titular de la noticia */
+    }
+
+    .contenedor-articulo {
+        margin: 20px auto;
+    }
+
+    .cuerpo-articulo p {
+        font-size: 1.05rem; /* Letra un poquito más pequeña para leer mejor en móvil */
+        text-align: left; /* Quitamos el justificado en móvil para evitar espacios raros */
+    }
+}
