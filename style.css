@@ -173,45 +173,136 @@ hr {
 
 @media (max-width: 768px) {
     
-    /* 1. Ajustes del Encabezado */
-    .titulo-principal {
-        font-size: 2.2rem; /* Achicamos el título del periódico */
-        letter-spacing: 1px;
-    }
-
+    /* 1. Encabezado más compacto y elegante */
     .encabezado {
-        padding: 20px 10px;
+        padding: 15px 10px;
+        border-bottom: 1px solid #e2e2e2; /* Línea fina simple */
     }
 
-    /* 2. Ajustes del Menú de Navegación */
+    .titulo-principal {
+        font-size: 2.2rem;
+        margin: 5px 0;
+        letter-spacing: 0; /* Más compacto */
+    }
+
+    .fecha, .edicion {
+        font-size: 0.75rem;
+        font-family: sans-serif; /* Contraste moderno para detalles */
+    }
+
+    /* 2. Menú Deslizable (Scroll Horizontal) - Clásico de Apps de Noticias */
+    .navegacion {
+        background-color: white; /* Fondo blanco para limpiar la interfaz */
+        border-bottom: 1px solid #e2e2e2;
+        padding: 0;
+    }
+
     .navegacion ul {
-        flex-direction: column; /* Apilamos los botones uno debajo del otro */
-        gap: 15px;
-        padding: 15px 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto; /* Permite deslizar con el dedo */
+        -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iPhones */
+        padding: 12px 15px;
+        gap: 20px;
+        justify-content: flex-start;
     }
 
-    /* 3. Ajustes de la Grilla de Noticias (Portada) */
+    /* Ocultar la barra de scroll visual para que se vea limpio */
+    .navegacion ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    .navegacion a {
+        color: var(--texto-oscuro); /* Texto oscuro en lugar de blanco */
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        white-space: nowrap; /* Evita que los botones se partan en dos líneas */
+    }
+
+    .navegacion a:hover {
+        color: var(--uah-azul);
+    }
+
+    /* 3. Grilla Principal: Adiós columnas, hola flujo vertical continuo */
     .contenedor-noticias {
-        grid-template-columns: 1fr; /* Cambiamos a UNA sola columna */
-        gap: 30px;
-        margin: 20px auto;
+        grid-template-columns: 1fr;
+        gap: 0; /* Quitamos los huecos, usaremos líneas divisorias */
+        margin: 10px auto;
+        padding: 0 15px;
+    }
+
+    /* 4. Noticia Principal (Lead Article) */
+    .noticia-destacada {
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e2e2e2; /* Línea divisoria */
+        margin-bottom: 20px;
     }
 
     .noticia-destacada h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        font-weight: 900;
+        line-height: 1.15; /* Títulos más apretados */
+        margin-bottom: 12px;
     }
 
-    /* 4. Ajustes del Artículo Individual (Plantilla) */
+    /* 5. Noticias Secundarias: Estilo Lista con Miniatura a la derecha */
+    .noticias-secundarias {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .noticia-corta {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e2e2e2;
+        margin-bottom: 15px;
+    }
+
+    /* La última noticia no necesita línea debajo */
+    .noticia-corta:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .texto-corta h3 {
+        font-size: 1.2rem;
+        line-height: 1.2;
+        margin-top: 0;
+        margin-bottom: 8px;
+        color: var(--uah-azul);
+    }
+
+    .texto-corta p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin: 0;
+        color: #555;
+    }
+
+    .noticia-corta img {
+        width: 80px; /* Tamaño de la miniatura */
+        height: 80px;
+        object-fit: cover; /* Recorta la imagen para que sea un cuadrado perfecto */
+    }
+
+    /* Ocultar elementos innecesarios en móvil */
+    hr {
+        display: none;
+    }
+    
+    /* 6. Ajustes de la Plantilla de Lectura (El Artículo Interno) */
     .titulo-articulo {
-        font-size: 2rem; /* Achicamos el titular de la noticia */
-    }
-
-    .contenedor-articulo {
-        margin: 20px auto;
+        font-size: 2rem;
+        line-height: 1.15;
     }
 
     .cuerpo-articulo p {
-        font-size: 1.05rem; /* Letra un poquito más pequeña para leer mejor en móvil */
-        text-align: left; /* Quitamos el justificado en móvil para evitar espacios raros */
+        font-size: 1.1rem; /* Tamaño óptimo para lectura larga en pantallas pequeñas */
+        text-align: left; /* Alineación a la izquierda obligatoria en móviles modernos */
     }
 }
