@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Editorial — El Humboldtiano</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #f9f9f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      .cargando {
+        text-align: center;
+        color: #003366;
+      }
+      .cargando h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .cargando p {
+        color: #666;
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cargando" id="loader">
+      <h1>Cargando panel editorial…</h1>
+      <p>El Humboldtiano — Periódico Virtual UAH</p>
+    </div>
+    <script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
+    <script>
+      window.addEventListener("load", function () {
+        var loader = document.getElementById("loader");
+        if (loader) {
+          loader.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>

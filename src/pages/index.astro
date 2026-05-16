@@ -1,0 +1,255 @@
+---
+// index.astro — Portada: 1 artículo destacado + 4 secundarios
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getArticles } from "../content/utils";
+import { Image } from "astro:assets";
+import fallbackImg from "../assets/image-pred.jpg";
+
+const articles = await getArticles();
+articles.sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+);
+
+const featured =
+  articles.find((a) => a.data.destacado) || articles[0] || null;
+const secondary = articles.filter((a) => a !== featured).slice(0, 4);
+
+const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
+---
+
+<BaseLayout title={pageTitle}>
+  <Header />
+  <Nav />
+
+  <main>
+    {
+      articles.length === 0 ? (
+        <section class="sin-articulos">
+          <h2>Próximamente</h2>
+          <p>
+            Nuestro equipo editorial está preparando los primeros artículos.
+            ¡Volvé pronto!
+          </p>
+        </section>
+      ) : (
+        <>
+          {
+            featured && (
+              <section class="destacado">
+                <article class="articulo-principal">
+                  <div class="destacado-imagen">
+                    {
+                      featured.data.coverImage ? (
+                        <Image
+                          src={featured.data.coverImage}
+                          alt={`Imagen del artículo: ${featured.data.title}`}
+                          width={800}
+                          height={450}
+                          quality={80}
+                          format="webp"
+                          loading="eager"
+                        />
+                      ) : (
+                        <Image
+                          src={fallbackImg}
+                          alt={`Imagen predeterminada del artículo: ${featured.data.title}`}
+                          width={800}
+                          height={450}
+                          quality={80}
+                          format="webp"
+                          loading="eager"
+                        />
+                      )
+                    }
+                  </div>
+                  <div class="destacado-contenido">
+                    <span class="etiqueta-categoria">
+                      {featured.data.category}
+                    </span>
+                    <h2>
+                      <a href={`/articulo/${featured.id}`}>
+                        {featured.data.title}
+                      </a>
+                    </h2>
+                    <p class="meta-info">
+                      Por {featured.data.author} &middot;{" "}
+                      {featured.readingTime} min de lectura
+                    </p>
+                    {featured.data.resumen && (
+                      <p class="resumen">{featured.data.resumen}</p>
+                    )}
+                    <a
+                      href={`/articulo/${featured.id}`}
+                      class="leer-mas"
+                      aria-label={`Leer artículo: ${featured.data.title}`}
+                    >
+                      Leer artículo completo &rarr;
+                    </a>
+                  </div>
+                </article>
+              </section>
+            )
+          }
+
+          {secondary.length > 0 && (
+            <section class="secundarios">
+              <h2 class="titulo-seccion">Más noticias</h2>
+              <div class="cuadricula-noticias">
+                {secondary.map((article) => (
+                  <ArticleCard article={article} />
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      )
+    }
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  /* ── Sin artículos ──────────────────────── */
+  .sin-articulos {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .sin-articulos h2 {
+    font-size: 2rem;
+    color: var(--uah-azul);
+    margin-bottom: 10px;
+  }
+
+  .sin-articulos p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+
+  /* ── Destacado ──────────────────────────── */
+  .articulo-principal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: white;
+    border: 1px solid #e2e2e2;
+    margin-bottom: 50px;
+  }
+
+  .destacado-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-right: 4px solid var(--uah-amarillo);
+  }
+
+  .destacado-contenido {
+    padding: 40px 40px 40px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .destacado-contenido h2 {
+    font-size: 2.2rem;
+    margin: 10px 0 15px;
+    line-height: 1.2;
+    color: var(--texto-oscuro);
+  }
+
+  .destacado-contenido h2 a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .destacado-contenido h2 a:hover {
+    color: var(--uah-azul);
+  }
+
+  .destacado-contenido .meta-info {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+  }
+
+  .resumen {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 20px;
+  }
+
+  .leer-mas {
+    display: inline-block;
+    background: var(--uah-azul);
+    color: white;
+    padding: 10px 24px;
+    text-decoration: none;
+    font-weight: 700;
+    font-family: var(--fuente-sans);
+    font-size: 0.9rem;
+    align-self: flex-start;
+    transition: background 0.2s;
+  }
+
+  .leer-mas:hover {
+    background: var(--uah-amarillo);
+    color: var(--uah-azul);
+  }
+
+  /* ── Secundarios ─────────────────────────── */
+  .titulo-seccion {
+    font-size: 1.5rem;
+    color: var(--uah-azul);
+    border-left: 4px solid var(--uah-amarillo);
+    padding-left: 15px;
+    margin-bottom: 25px;
+  }
+
+  .cuadricula-noticias {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+  }
+
+  /* ── Responsive ──────────────────────────── */
+  @media (max-width: 768px) {
+    main {
+      padding: 20px 15px;
+    }
+
+    .articulo-principal {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .destacado-imagen img {
+      border-right: none;
+      border-bottom: 4px solid var(--uah-amarillo);
+      height: 250px;
+    }
+
+    .destacado-contenido {
+      padding: 25px 20px;
+    }
+
+    .destacado-contenido h2 {
+      font-size: 1.6rem;
+    }
+
+    .cuadricula-noticias {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
