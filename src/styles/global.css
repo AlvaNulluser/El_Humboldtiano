@@ -1,0 +1,260 @@
+/* ========================================
+   El Humboldtiano — Design Tokens + Base
+   ======================================== */
+
+:root {
+  /* Paleta institucional UAH */
+  --uah-azul: #003366;
+  --uah-amarillo: #ffb300;
+  --texto-oscuro: #333333;
+  --fondo-claro: #f9f9f9;
+
+  /* Tipografía */
+  --fuente-serif: "Merriweather", serif;
+  --fuente-sans: system-ui, -apple-system, sans-serif;
+}
+
+/* ── Reset & Base ───────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fuente-serif);
+  background-color: var(--fondo-claro);
+  color: var(--texto-oscuro);
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Header: Masthead ───────────────────── */
+
+.encabezado {
+  text-align: center;
+  padding: 30px 20px;
+  border-bottom: 4px double var(--texto-oscuro);
+}
+
+.titulo-principal {
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin: 10px 0;
+  color: var(--uah-azul);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.titulo-principal a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.fecha,
+.edicion {
+  font-size: 0.9rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
+/* ── Nav: Barra de navegación ───────────── */
+
+.navegacion {
+  background-color: var(--uah-azul);
+  padding: 10px 0;
+  border-bottom: 4px solid var(--uah-amarillo);
+}
+
+.navegacion ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.navegacion a {
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.navegacion a:hover {
+  color: var(--uah-amarillo);
+}
+
+/* ── Footer: Pie de página ──────────────── */
+
+.pie-pagina {
+  background-color: var(--uah-azul);
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
+  margin-top: 60px;
+  border-top: 4px solid var(--uah-amarillo);
+}
+
+.pie-pagina p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.pie-pagina .social-links {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.pie-pagina .social-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.pie-pagina .social-links a:hover {
+  color: var(--uah-amarillo);
+}
+
+/* ── Article Card: Tarjeta de noticia ───── */
+
+.tarjeta-noticia {
+  background: white;
+  border: 1px solid #e2e2e2;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta-noticia:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.tarjeta-noticia img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-bottom: 3px solid var(--uah-amarillo);
+}
+
+.tarjeta-contenido {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.etiqueta-categoria {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-family: var(--fuente-sans);
+  color: #888;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.tarjeta-contenido h3 {
+  font-size: 1.3rem;
+  margin: 0 0 10px 0;
+  color: var(--texto-oscuro);
+  line-height: 1.3;
+}
+
+.tarjeta-contenido h3 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.tarjeta-contenido h3 a:hover {
+  color: var(--uah-azul);
+}
+
+.tarjeta-contenido .meta-info {
+  color: #555;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.tarjeta-enlace {
+  margin-top: auto;
+  color: var(--uah-azul);
+  font-weight: bold;
+  text-decoration: none;
+  font-family: var(--fuente-sans);
+  font-size: 0.9rem;
+  align-self: flex-start;
+}
+
+.tarjeta-enlace:hover {
+  color: var(--uah-amarillo);
+}
+
+/* ── Responsive ─────────────────────────── */
+
+@media (max-width: 768px) {
+  .encabezado {
+    padding: 15px 10px;
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  .titulo-principal {
+    font-size: 2.2rem;
+    letter-spacing: 0;
+  }
+
+  .fecha,
+  .edicion {
+    font-size: 0.75rem;
+  }
+
+  .navegacion {
+    background-color: white;
+    border-bottom: 1px solid #e2e2e2;
+    padding: 0;
+  }
+
+  .navegacion ul {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px 15px;
+    gap: 20px;
+    justify-content: flex-start;
+  }
+
+  .navegacion ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navegacion a {
+    color: var(--texto-oscuro);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .navegacion a:hover {
+    color: var(--uah-azul);
+  }
+}

@@ -1,0 +1,18 @@
+---
+// Header.astro — Mástil del periódico con doble borde y título centrado
+---
+
+<header class="encabezado">
+  <div class="fecha">
+    {new Date().toLocaleDateString("es-VE", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })}
+  </div>
+  <h1 class="titulo-principal">
+    <a href="/">El Humboldtiano</a>
+  </h1>
+  <div class="edicion">Edición Digital</div>
+</header>

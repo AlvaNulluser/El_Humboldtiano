@@ -1,0 +1,251 @@
+---
+// [slug].astro — Página de artículo completo con SEO meta
+import type { GetStaticPaths } from "astro";
+import { getCollection, type CollectionEntry, render } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import fallbackImg from "../../assets/image-pred.jpg";
+import { computeReadingTime } from "../../content/utils";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const articles = await getCollection(
+    "articles",
+    ({ data }) => data.status === "Listo",
+  );
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article },
+  }));
+};
+
+const { article } = Astro.props as { article: CollectionEntry<"articles"> };
+const { data } = article;
+const { Content } = await render(article);
+
+const readingTime = computeReadingTime(article.body ?? "");
+const seoTitle = `${data.title} — El Humboldtiano`;
+const seoDescription =
+  data.resumen || `Artículo de ${data.author} en la categoría ${data.category}.`;
+const seoImage = data.coverImage || undefined;
+
+const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  image={seoImage}
+>
+  <Header />
+  <Nav />
+
+  <main class="articulo-completo">
+    <article>
+      <header class="articulo-cabecera">
+        <span class="etiqueta-categoria">{data.category}</span>
+        <h1>{data.title}</h1>
+
+        <div class="articulo-meta">
+          <p class="autor">Por <strong>{data.author}</strong></p>
+          <p class="fecha">{formattedDate}</p>
+          <p class="tiempo-lectura">{readingTime} min de lectura</p>
+        </div>
+
+        {data.tags.length > 0 && (
+          <ul class="etiquetas-lista">
+            {data.tags.map((tag) => (
+              <li class="etiqueta-tag">{tag}</li>
+            ))}
+          </ul>
+        )}
+      </header>
+
+      {
+        data.coverImage ? (
+          <figure class="articulo-imagen">
+            <Image
+              src={data.coverImage}
+              alt={`Imagen del artículo: ${data.title}`}
+              width={800}
+              height={450}
+              quality={80}
+              format="webp"
+              loading="eager"
+            />
+          </figure>
+        ) : (
+          <figure class="articulo-imagen">
+            <Image
+              src={fallbackImg}
+              alt={`Imagen predeterminada del artículo: ${data.title}`}
+              width={800}
+              height={450}
+              quality={80}
+              format="webp"
+              loading="eager"
+            />
+          </figure>
+        )
+      }
+
+      <div class="articulo-cuerpo">
+        <Content />
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .articulo-completo {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  /* ── Cabecera ─────────────────────────────── */
+  .articulo-cabecera {
+    margin-bottom: 30px;
+  }
+
+  .articulo-cabecera h1 {
+    font-size: 2.6rem;
+    line-height: 1.2;
+    margin: 12px 0 20px;
+    color: var(--texto-oscuro);
+  }
+
+  .articulo-meta {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  .articulo-meta p {
+    margin: 4px 0;
+  }
+
+  .autor strong {
+    color: var(--uah-azul);
+  }
+
+  /* ── Etiquetas ────────────────────────────── */
+  .etiquetas-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .etiqueta-tag {
+    background: var(--uah-azul);
+    color: white;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-family: var(--fuente-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Imagen del artículo ──────────────────── */
+  .articulo-imagen {
+    margin: 0 0 30px;
+  }
+
+  .articulo-imagen img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #e2e2e2;
+  }
+
+  /* ── Cuerpo ────────────────────────────────── */
+  .articulo-cuerpo {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--texto-oscuro);
+  }
+
+  .articulo-cuerpo :global(h2) {
+    font-size: 1.6rem;
+    color: var(--uah-azul);
+    margin-top: 35px;
+    margin-bottom: 15px;
+  }
+
+  .articulo-cuerpo :global(h3) {
+    font-size: 1.3rem;
+    color: var(--texto-oscuro);
+    margin-top: 25px;
+    margin-bottom: 10px;
+  }
+
+  .articulo-cuerpo :global(p) {
+    margin-bottom: 20px;
+  }
+
+  .articulo-cuerpo :global(blockquote) {
+    border-left: 4px solid var(--uah-amarillo);
+    margin: 25px 0;
+    padding: 10px 20px;
+    background: #fafafa;
+    font-style: italic;
+  }
+
+  .articulo-cuerpo :global(img) {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
+  }
+
+  .articulo-cuerpo :global(a) {
+    color: var(--uah-azul);
+    text-decoration: underline;
+  }
+
+  .articulo-cuerpo :global(a:hover) {
+    color: var(--uah-amarillo);
+  }
+
+  .articulo-cuerpo :global(ul),
+  .articulo-cuerpo :global(ol) {
+    margin: 15px 0;
+    padding-left: 25px;
+  }
+
+  .articulo-cuerpo :global(li) {
+    margin-bottom: 8px;
+  }
+
+  .articulo-cuerpo :global(hr) {
+    border: none;
+    border-top: 1px solid #e2e2e2;
+    margin: 40px 0;
+  }
+
+  @media (max-width: 768px) {
+    .articulo-completo {
+      padding: 20px 15px 40px;
+    }
+
+    .articulo-cabecera h1 {
+      font-size: 1.8rem;
+    }
+
+    .articulo-cuerpo {
+      font-size: 1.05rem;
+    }
+  }
+</style>
