@@ -1,0 +1,105 @@
+backend:
+  name: github
+  repo: AlvaNulluser/El_Humboldtiano
+  branch: main
+  base_url: https://el-humboldtiano.vercel.app
+  auth_endpoint: api/auth
+
+publish_mode: editorial_workflow
+
+media_folder: public/img
+public_folder: /img
+
+collections:
+  - name: articles
+    label: Artículos
+    label_singular: Artículo
+    folder: src/content/articles
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    preview_path: articulo/{{slug}}
+    editor:
+      preview: false
+    fields:
+      - label: Título
+        name: title
+        widget: string
+        required: true
+        hint: Máximo 120 caracteres
+      - label: Categoría
+        name: category
+        widget: select
+        required: true
+        options:
+          - Vida Universitaria
+          - Huellas
+          - Ciudad y Arte
+          - En Radar
+      - label: Etiquetas
+        name: tags
+        widget: list
+        required: false
+        field:
+          widget: select
+          options:
+            - Música
+            - Cine
+            - Arte Urbano
+            - Literatura
+            - Teatro
+            - Videojuegos
+            - Urbano
+            - Indie
+            - Caracas
+            - Internacional
+            - Europa
+            - Latinoamérica
+            - Norteamérica
+            - Emprendimiento
+            - Investigación
+            - Egresados
+            - Clubes
+            - Administrativo
+            - Deportes
+            - Ciencia
+            - Economía
+            - Tecnología
+            - Historia
+      - label: Autor
+        name: author
+        widget: string
+        required: true
+      - label: Fecha de publicación
+        name: publishDate
+        widget: datetime
+        required: true
+        date_format: DD/MM/YYYY
+        time_format: HH:mm
+      - label: Imagen de portada
+        name: coverImage
+        widget: image
+        required: false
+        hint: Imagen que aparecerá en la portada y tarjetas
+      - label: Resumen
+        name: resumen
+        widget: string
+        required: false
+        hint: Breve descripción del artículo (usada en portada y SEO)
+      - label: Destacado
+        name: destacado
+        widget: boolean
+        default: false
+        hint: Mostrar como artículo principal en la portada
+      - label: Estado
+        name: status
+        widget: select
+        required: true
+        default: Borrador
+        options:
+          - Borrador
+          - En revisión
+          - Listo
+      - label: Cuerpo
+        name: body
+        widget: markdown
+        required: true

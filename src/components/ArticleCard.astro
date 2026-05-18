@@ -1,0 +1,61 @@
+---
+// ArticleCard.astro — Tarjeta de artículo con imagen, categoría, autor y tiempo de lectura
+import { Image } from "astro:assets";
+import fallbackImg from "../assets/image-pred.jpg";
+import type { ProcessedArticle } from "../content/utils";
+
+export interface Props {
+  article: ProcessedArticle;
+}
+
+const { article } = Astro.props;
+const {
+  data: { title, category, author, coverImage },
+  readingTime,
+  id,
+} = article;
+
+const articleUrl = `/articulo/${id}`;
+const altText = coverImage
+  ? `Imagen del artículo: ${title}`
+  : `Imagen predeterminada del artículo: ${title}`;
+---
+
+<article class="tarjeta-noticia">
+  {
+    coverImage ? (
+      <Image
+        src={coverImage}
+        alt={altText}
+        width={600}
+        height={400}
+        quality={80}
+        format="webp"
+        loading="lazy"
+      />
+    ) : (
+      <Image
+        src={fallbackImg}
+        alt={altText}
+        width={600}
+        height={400}
+        quality={80}
+        format="webp"
+        loading="lazy"
+      />
+    )
+  }
+
+  <div class="tarjeta-contenido">
+    <span class="etiqueta-categoria">{category}</span>
+    <h3>
+      <a href={articleUrl} rel="bookmark">{title}</a>
+    </h3>
+    <p class="meta-info">
+      Por {author} &middot; {readingTime} min de lectura
+    </p>
+    <a href={articleUrl} class="tarjeta-enlace" aria-label={`Leer artículo: ${title}`}>
+      Leer artículo &rarr;
+    </a>
+  </div>
+</article>
