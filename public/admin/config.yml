@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: owner/El_Humboldtiano
+  repo: AlvaNulluser/El_Humboldtiano
   branch: main
   base_url: https://el-humboldtiano.vercel.app
   auth_endpoint: api/auth
