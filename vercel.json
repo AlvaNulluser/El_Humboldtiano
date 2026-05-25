@@ -3,7 +3,7 @@
   "outputDirectory": "dist",
   "framework": "astro",
   "env": {
-    "CMS_BACKEND_REPO": "owner/El_Humboldtiano",
+    "CMS_BACKEND_REPO": "AlvaNulluser/El_Humboldtiano",
     "SITE_URL": "https://el-humboldtiano.vercel.app"
   }
 }

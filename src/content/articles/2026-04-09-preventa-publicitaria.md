@@ -9,7 +9,7 @@ tags:
   - "Caracas"
 coverImage: "/img/preventa-publicitaria.jpg"
 resumen: "Los pasillos de nuestra casa de estudios se llenaron de visión comercial con la reciente preventa publicitaria, un evento donde los estudiantes de la carrera de Publicidad exhibieron sus proyectos finales de emprendimiento."
-destacado: false
+destacado: true
 status: "Listo"
 ---
 
@@ -38,7 +38,6 @@ La esencia de la actividad quedó muy clara desde la coordinación académica. E
 
 ## Entrevistas
 
-Aquí tienes un resumen de ambos proyectos, destacando qué producto desarrollaron y cómo fue el proceso estratégico y creativo detrás de cada uno:
 
 ### 1. Proyecto "Converso": Galletas para Eventos
 
