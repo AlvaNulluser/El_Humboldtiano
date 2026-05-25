@@ -1,0 +1,131 @@
+---
+// PrevNext.astro — Navegación cronológica entre artículos
+import type { ProcessedArticle } from "../content/utils";
+
+export interface Props {
+  current: ProcessedArticle;
+  all: ProcessedArticle[];
+}
+
+const { current, all } = Astro.props;
+
+// Sort all articles by publishDate ascending (oldest first)
+const sorted = [...all].sort(
+  (a, b) => a.data.publishDate.getTime() - b.data.publishDate.getTime(),
+);
+
+const currentIndex = sorted.findIndex((a) => a.id === current.id);
+
+// Only render if there are at least 2 articles and the current one is found
+const showNav = sorted.length > 1 && currentIndex !== -1;
+
+const prev = currentIndex > 0 ? sorted[currentIndex - 1] : null;
+const next = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
+---
+
+{showNav && (prev || next) && (
+  <nav class="prevnext" aria-label="Navegación entre artículos">
+    {prev ? (
+      <a
+        href={`/articulo/${prev.id}`}
+        class="prevnext-enlace prevnext-anterior"
+        rel="prev"
+      >
+        <span class="prevnext-etiqueta">&larr; Anterior</span>
+        <span class="prevnext-titulo">{prev.data.title}</span>
+        <span class="prevnext-meta">
+          Por {prev.data.author} &middot; {prev.readingTime} min de lectura
+        </span>
+      </a>
+    ) : (
+      <div class="prevnext-vacio" />
+    )}
+
+    {next ? (
+      <a
+        href={`/articulo/${next.id}`}
+        class="prevnext-enlace prevnext-siguiente"
+        rel="next"
+      >
+        <span class="prevnext-etiqueta">Siguiente &rarr;</span>
+        <span class="prevnext-titulo">{next.data.title}</span>
+        <span class="prevnext-meta">
+          Por {next.data.author} &middot; {next.readingTime} min de lectura
+        </span>
+      </a>
+    ) : (
+      <div class="prevnext-vacio" />
+    )}
+  </nav>
+)}
+
+<style>
+  .prevnext {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid #e2e2e2;
+  }
+
+  .prevnext-enlace {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-decoration: none;
+    padding: 20px;
+    border: 1px solid #e2e2e2;
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .prevnext-enlace:hover {
+    border-color: var(--uah-amarillo);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .prevnext-anterior {
+    text-align: left;
+  }
+
+  .prevnext-siguiente {
+    text-align: right;
+  }
+
+  .prevnext-etiqueta {
+    font-family: var(--fuente-sans);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--uah-azul);
+  }
+
+  .prevnext-titulo {
+    font-family: var(--fuente-serif);
+    font-size: 1.1rem;
+    color: var(--texto-oscuro);
+    line-height: 1.3;
+  }
+
+  .prevnext-meta {
+    font-size: 0.8rem;
+    color: #888;
+  }
+
+  .prevnext-vacio {
+    /* Empty spacer to maintain grid balance when one side has no link */
+  }
+
+  @media (max-width: 768px) {
+    .prevnext {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    .prevnext-siguiente {
+      text-align: left;
+    }
+  }
+</style>
