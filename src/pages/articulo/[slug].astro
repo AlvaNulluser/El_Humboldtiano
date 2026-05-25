@@ -71,13 +71,11 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
       {
         data.coverImage ? (
           <figure class="articulo-imagen">
-            <Image
+            <img
               src={data.coverImage}
               alt={`Imagen del artículo: ${data.title}`}
               width={800}
               height={450}
-              quality={80}
-              format="webp"
               loading="eager"
             />
           </figure>

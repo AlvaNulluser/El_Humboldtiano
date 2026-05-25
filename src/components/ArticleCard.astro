@@ -24,13 +24,11 @@ const altText = coverImage
 <article class="tarjeta-noticia">
   {
     coverImage ? (
-      <Image
+      <img
         src={coverImage}
         alt={altText}
         width={600}
         height={400}
-        quality={80}
-        format="webp"
         loading="lazy"
       />
     ) : (

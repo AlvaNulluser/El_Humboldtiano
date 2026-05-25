@@ -44,13 +44,11 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
                   <div class="destacado-imagen">
                     {
                       featured.data.coverImage ? (
-                        <Image
+                        <img
                           src={featured.data.coverImage}
                           alt={`Imagen del artículo: ${featured.data.title}`}
                           width={800}
                           height={450}
-                          quality={80}
-                          format="webp"
                           loading="eager"
                         />
                       ) : (
