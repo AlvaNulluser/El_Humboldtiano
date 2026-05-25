@@ -36,7 +36,7 @@ coverage/
 # Editor / local tools
 .opencode/
 
-# SDD artifacts (tracked in Engram)
+# SDD artifacts
 openspec/
 
 # Temporary files
