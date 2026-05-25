@@ -1,0 +1,35 @@
+---
+// RelatedArticles.astro — Muestra hasta 3 artículos de la misma categoría
+import ArticleCard from "./ArticleCard.astro";
+import type { ProcessedArticle } from "../content/utils";
+
+export interface Props {
+  current: ProcessedArticle;
+  all: ProcessedArticle[];
+}
+
+const { current, all } = Astro.props;
+
+const related = all
+  .filter(
+    (a) =>
+      a.data.category === current.data.category && a.id !== current.id,
+  )
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+
+if (related.length === 0) {
+  // Hidden entirely — render nothing
+}
+---
+
+{related.length > 0 && (
+  <section class="relacionados">
+    <h2 class="titulo-seccion">Artículos relacionados</h2>
+    <div class="cuadricula-relacionados">
+      {related.map((article) => (
+        <ArticleCard article={article} />
+      ))}
+    </div>
+  </section>
+)}

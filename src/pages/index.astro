@@ -6,6 +6,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import ArticleCard from "../components/ArticleCard.astro";
 import { getArticles } from "../content/utils";
+import { CATEGORIES, deslugify } from "../utils/slugify";
 import { Image } from "astro:assets";
 import fallbackImg from "../assets/image-pred.jpg";
 
@@ -44,13 +45,11 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
                   <div class="destacado-imagen">
                     {
                       featured.data.coverImage ? (
-                        <Image
+                        <img
                           src={featured.data.coverImage}
                           alt={`Imagen del artículo: ${featured.data.title}`}
                           width={800}
                           height={450}
-                          quality={80}
-                          format="webp"
                           loading="eager"
                         />
                       ) : (
@@ -105,6 +104,38 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
               </div>
             </section>
           )}
+
+          <!-- Category sections -->
+          {CATEGORIES.map((cat) => {
+            const catArticles = articles
+              .filter((a) => a.data.category === cat.name)
+              .slice(0, 3);
+            return (
+              <section class="seccion-categoria">
+                <h2 class="titulo-seccion">{cat.name}</h2>
+                {catArticles.length > 0 ? (
+                  <>
+                    <div class="cuadricula-noticias">
+                      {catArticles.map((article) => (
+                        <ArticleCard article={article} />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p class="sin-articulos-cat">
+                    Próximamente — suscribite a nuestro{" "}
+                    <a href="/rss.xml">feed RSS</a>.
+                  </p>
+                )}
+                <a
+                  href={`/categoria/${cat.slug}/1`}
+                  class="ver-mas"
+                >
+                  Ver más en {cat.name} &rarr;
+                </a>
+              </section>
+            );
+          })}
         </>
       )
     }
@@ -221,6 +252,38 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 25px;
+  }
+
+  /* ── Categorías ─────────────────────────── */
+  .seccion-categoria {
+    margin-top: 50px;
+  }
+
+  .sin-articulos-cat {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+
+  .sin-articulos-cat a {
+    color: var(--uah-azul);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .ver-mas {
+    display: inline-block;
+    margin-top: 20px;
+    font-family: var(--fuente-sans);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--uah-azul);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .ver-mas:hover {
+    color: var(--uah-amarillo);
   }
 
   /* ── Responsive ──────────────────────────── */

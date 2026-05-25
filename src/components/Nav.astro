@@ -1,14 +1,55 @@
 ---
-// Nav.astro — Barra de navegación con categorías editoriales
+// Nav.astro — Barra de navegación con categorías editoriales + hamburger mobile
+import { CATEGORIES } from "../utils/slugify";
 ---
 
 <nav class="navegacion" aria-label="Navegación principal">
-  <ul>
-    <li><a href="/">Portada</a></li>
-    <li><a href="/archivo/1">Archivo</a></li>
-    <li><a href="#">Vida Universitaria</a></li>
-    <li><a href="#">Huellas</a></li>
-    <li><a href="#">Ciudad y Arte</a></li>
-    <li><a href="#">En Radar</a></li>
+  <button
+    class="hamburger"
+    aria-label="Menú de navegación"
+    aria-expanded="false"
+    aria-controls="nav-menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <ul id="nav-menu">
+    {CATEGORIES.map((cat) => (
+      <li><a href={`/categoria/${cat.slug}/1`}>{cat.name}</a></li>
+    ))}
   </ul>
 </nav>
+
+<script>
+  const hamburger = document.querySelector(".hamburger") as HTMLButtonElement | null;
+  const menu = document.getElementById("nav-menu") as HTMLUListElement | null;
+
+  if (hamburger && menu) {
+    hamburger.addEventListener("click", () => {
+      const expanded = hamburger.getAttribute("aria-expanded") === "true";
+      hamburger.setAttribute("aria-expanded", String(!expanded));
+      menu.classList.toggle("open", !expanded);
+    });
+
+    document.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === "Escape" && menu.classList.contains("open")) {
+        hamburger.setAttribute("aria-expanded", "false");
+        menu.classList.remove("open");
+        hamburger.focus();
+      }
+    });
+
+    document.addEventListener("click", (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        menu.classList.contains("open") &&
+        !hamburger.contains(target) &&
+        !menu.contains(target)
+      ) {
+        hamburger.setAttribute("aria-expanded", "false");
+        menu.classList.remove("open");
+      }
+    });
+  }
+</script>

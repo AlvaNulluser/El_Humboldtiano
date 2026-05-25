@@ -7,8 +7,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import RelatedArticles from "../../components/RelatedArticles.astro";
+import PrevNext from "../../components/PrevNext.astro";
 import fallbackImg from "../../assets/image-pred.jpg";
-import { computeReadingTime } from "../../content/utils";
+import { computeReadingTime, getArticles } from "../../content/utils";
+import type { ProcessedArticle } from "../../content/utils";
+import { slugify } from "../../utils/slugify";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const articles = await getCollection(
@@ -37,6 +42,21 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
   month: "long",
   day: "numeric",
 });
+
+const isoDate = data.publishDate.toISOString().split("T")[0];
+const categorySlug = slugify(data.category);
+
+const breadcrumbItems = [
+  { label: "Portada", href: "/" },
+  { label: data.category, href: `/categoria/${categorySlug}/1` },
+  { label: data.title },
+];
+
+const allArticles = await getArticles();
+const currentArticle: ProcessedArticle = {
+  ...article,
+  readingTime,
+};
 ---
 
 <BaseLayout
@@ -48,6 +68,7 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
   <Nav />
 
   <main class="articulo-completo">
+    <Breadcrumbs items={breadcrumbItems} />
     <article>
       <header class="articulo-cabecera">
         <span class="etiqueta-categoria">{data.category}</span>
@@ -55,7 +76,7 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
 
         <div class="articulo-meta">
           <p class="autor">Por <strong>{data.author}</strong></p>
-          <p class="fecha">{formattedDate}</p>
+          <p class="fecha"><time datetime={isoDate}>{formattedDate}</time></p>
           <p class="tiempo-lectura">{readingTime} min de lectura</p>
         </div>
 
@@ -71,13 +92,11 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
       {
         data.coverImage ? (
           <figure class="articulo-imagen">
-            <Image
+            <img
               src={data.coverImage}
               alt={`Imagen del artículo: ${data.title}`}
               width={800}
               height={450}
-              quality={80}
-              format="webp"
               loading="eager"
             />
           </figure>
@@ -100,6 +119,9 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
         <Content />
       </div>
     </article>
+
+    <RelatedArticles current={currentArticle} all={allArticles} />
+    <PrevNext current={currentArticle} all={allArticles} />
   </main>
 
   <Footer />
@@ -138,6 +160,12 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
 
   .autor strong {
     color: var(--uah-azul);
+  }
+
+  .fecha time {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--texto-oscuro);
   }
 
   /* ── Etiquetas ────────────────────────────── */
