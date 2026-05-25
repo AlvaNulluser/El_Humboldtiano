@@ -1,14 +1,12 @@
 ---
 // Nav.astro — Barra de navegación con categorías editoriales
+import { CATEGORIES } from "../utils/slugify";
 ---
 
 <nav class="navegacion" aria-label="Navegación principal">
   <ul>
-    <li><a href="/">Portada</a></li>
-    <li><a href="/archivo/1">Archivo</a></li>
-    <li><a href="#">Vida Universitaria</a></li>
-    <li><a href="#">Huellas</a></li>
-    <li><a href="#">Ciudad y Arte</a></li>
-    <li><a href="#">En Radar</a></li>
+    {CATEGORIES.map((cat) => (
+      <li><a href={`/categoria/${cat.slug}/1`}>{cat.name}</a></li>
+    ))}
   </ul>
 </nav>
