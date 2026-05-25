@@ -7,8 +7,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
+import RelatedArticles from "../../components/RelatedArticles.astro";
+import PrevNext from "../../components/PrevNext.astro";
 import fallbackImg from "../../assets/image-pred.jpg";
-import { computeReadingTime } from "../../content/utils";
+import { computeReadingTime, getArticles } from "../../content/utils";
+import type { ProcessedArticle } from "../../content/utils";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const articles = await getCollection(
@@ -37,6 +40,12 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
   month: "long",
   day: "numeric",
 });
+
+const allArticles = await getArticles();
+const currentArticle: ProcessedArticle = {
+  ...article,
+  readingTime,
+};
 ---
 
 <BaseLayout
@@ -98,6 +107,9 @@ const formattedDate = data.publishDate.toLocaleDateString("es-VE", {
         <Content />
       </div>
     </article>
+
+    <RelatedArticles current={currentArticle} all={allArticles} />
+    <PrevNext current={currentArticle} all={allArticles} />
   </main>
 
   <Footer />
