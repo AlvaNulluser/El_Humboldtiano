@@ -1,0 +1,77 @@
+---
+// 404.astro — Página de error personalizada
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+const pageTitle = "Página no encontrada — El Humboldtiano";
+---
+
+<BaseLayout title={pageTitle}>
+  <Header />
+  <Nav />
+
+  <main>
+    <h1>Página no encontrada</h1>
+    <p class="subtitulo">
+      La página que buscás no existe o fue movida.
+    </p>
+    <a href="/" class="enlace-volver">Volver a la portada &rarr;</a>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 80px 20px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 3rem;
+    color: var(--uah-azul);
+    margin-bottom: 15px;
+  }
+
+  .subtitulo {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  .enlace-volver {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--uah-azul);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-family: var(--fuente-sans);
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+
+  .enlace-volver:hover {
+    background: var(--uah-amarillo);
+    color: var(--uah-azul);
+  }
+
+  @media (max-width: 768px) {
+    main {
+      padding: 60px 15px;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .subtitulo {
+      font-size: 1rem;
+    }
+  }
+</style>
