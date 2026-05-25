@@ -16,6 +16,10 @@
 
 /* ── Reset & Base ───────────────────────── */
 
+html {
+  scroll-padding-top: 60px;
+}
+
 *,
 *::before,
 *::after {
@@ -72,6 +76,9 @@ img {
 /* ── Nav: Barra de navegación ───────────── */
 
 .navegacion {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   background-color: var(--uah-azul);
   padding: 10px 0;
   border-bottom: 4px solid var(--uah-amarillo);
