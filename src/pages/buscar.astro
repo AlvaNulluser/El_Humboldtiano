@@ -1,0 +1,277 @@
+---
+// buscar.astro — Página de búsqueda estática con cliente vanilla JS
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+const pageTitle = "Buscar — El Humboldtiano";
+---
+
+<BaseLayout title={pageTitle} description="Buscá artículos del periódico por título, contenido o autor.">
+  <Header />
+  <Nav />
+
+  <main class="buscar-pagina">
+    <h1 class="titulo-buscar">Buscar artículos</h1>
+
+    <div class="buscar-input-wrapper">
+      <input
+        type="search"
+        id="buscar-input"
+        class="buscar-input"
+        aria-label="Buscar artículos"
+        placeholder="Buscar artículos..."
+        autocomplete="off"
+      />
+    </div>
+
+    <section
+      id="buscar-resultados"
+      class="buscar-resultados"
+      aria-live="polite"
+    >
+      <!-- Populated by client JS -->
+    </section>
+
+    <noscript>
+      <p class="buscar-no-js">
+        La búsqueda requiere JavaScript. Podés explorar nuestro
+        <a href="/rss.xml">feed RSS</a> o visitar las
+        <a href="/categoria/vida-universitaria/1">categorías</a>.
+      </p>
+    </noscript>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  const input = document.getElementById("buscar-input") as HTMLInputElement;
+  const resultsEl = document.getElementById("buscar-resultados")!;
+
+  const NO_RESULTS_HTML = `
+    <div class="sin-resultados">
+      <p>No se encontraron resultados.</p>
+      <p>Probá con otras palabras o explorá nuestro <a href="/rss.xml">feed RSS</a>.</p>
+    </div>
+  `;
+
+  function resultCard(doc: any): string {
+    return `
+      <article class="buscar-tarjeta">
+        <span class="etiqueta-categoria">${escapeHtml(doc.category)}</span>
+        <h3><a href="${escapeHtml(doc.url)}">${escapeHtml(doc.title)}</a></h3>
+        <p class="meta-info">Por ${escapeHtml(doc.author)}</p>
+        <p class="buscar-resumen">${escapeHtml(doc.resumen || doc.body.slice(0, 150))}</p>
+      </article>
+    `;
+  }
+
+  function escapeHtml(str: string): string {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function matches(doc: any, query: string): boolean {
+    const q = query.toLowerCase();
+    const fields = [doc.title, doc.resumen, doc.body, ...doc.tags, doc.author, doc.category];
+    return fields.some((f) => (f || "").toLowerCase().includes(q));
+  }
+
+  function renderResults(docs: any[], query: string): void {
+    if (!query.trim()) {
+      resultsEl.innerHTML = "";
+      return;
+    }
+
+    const hits = docs.filter((d) => matches(d, query));
+
+    if (hits.length === 0) {
+      resultsEl.innerHTML = NO_RESULTS_HTML;
+      return;
+    }
+
+    resultsEl.innerHTML = hits.map(resultCard).join("");
+    const countEl = document.createElement("p");
+    countEl.className = "buscar-contador";
+    countEl.textContent = `${hits.length} resultado${hits.length !== 1 ? "s" : ""}`;
+    resultsEl.prepend(countEl);
+  }
+
+  let docs: any[] = [];
+  let debounceTimer: ReturnType<typeof setTimeout>;
+
+  function debouncedSearch(query: string): void {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => renderResults(docs, query), 200);
+  }
+
+  input?.addEventListener("input", () => {
+    debouncedSearch(input.value);
+  });
+
+  // Load search index
+  fetch("/search-index.json")
+    .then((res) => res.json())
+    .then((data) => {
+      docs = data;
+      // If input already has text (e.g. back-navigation), trigger search
+      if (input?.value.trim()) {
+        debouncedSearch(input.value);
+      }
+    })
+    .catch(() => {
+      resultsEl.innerHTML =
+        '<p class="sin-resultados">Error al cargar el índice de búsqueda. Recargá la página o intentá más tarde.</p>';
+    });
+</script>
+
+<style>
+  .buscar-pagina {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  .titulo-buscar {
+    font-size: 2rem;
+    color: var(--uah-azul);
+    border-left: 4px solid var(--uah-amarillo);
+    padding-left: 15px;
+    margin-bottom: 25px;
+  }
+
+  .buscar-input-wrapper {
+    margin-bottom: 30px;
+  }
+
+  .buscar-input {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    font-family: var(--fuente-sans);
+    border: 2px solid #ddd;
+    color: var(--texto-oscuro);
+    background: white;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .buscar-input:focus {
+    outline: none;
+    border-color: var(--uah-azul);
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+  }
+
+  .buscar-contador {
+    font-size: 0.85rem;
+    color: #666;
+    font-family: var(--fuente-sans);
+    margin-bottom: 15px;
+  }
+
+  /* ── Result cards ────────────────────────── */
+  .buscar-tarjeta {
+    background: white;
+    border: 1px solid #e2e2e2;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    transition: box-shadow 0.15s;
+  }
+
+  .buscar-tarjeta:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .buscar-tarjeta h3 {
+    font-size: 1.15rem;
+    margin: 6px 0 4px;
+    line-height: 1.3;
+  }
+
+  .buscar-tarjeta h3 a {
+    text-decoration: none;
+    color: var(--texto-oscuro);
+  }
+
+  .buscar-tarjeta h3 a:hover {
+    color: var(--uah-azul);
+  }
+
+  .buscar-tarjeta .meta-info {
+    font-size: 0.82rem;
+    color: #777;
+    margin: 0 0 8px;
+  }
+
+  .buscar-tarjeta .etiqueta-categoria {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-family: var(--fuente-sans);
+    color: #888;
+    letter-spacing: 0.5px;
+  }
+
+  .buscar-resumen {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ── No results ──────────────────────────── */
+  .sin-resultados {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+  }
+
+  .sin-resultados p {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+
+  .sin-resultados a {
+    color: var(--uah-azul);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .buscar-no-js {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 0.95rem;
+  }
+
+  .buscar-no-js a {
+    color: var(--uah-azul);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .buscar-pagina {
+      padding: 20px 15px 40px;
+    }
+
+    .titulo-buscar {
+      font-size: 1.5rem;
+    }
+
+    .buscar-input {
+      font-size: 1rem;
+      padding: 12px 14px;
+    }
+
+    .buscar-tarjeta {
+      padding: 14px 16px;
+    }
+  }
+</style>

@@ -16,6 +16,10 @@
 
 /* ── Reset & Base ───────────────────────── */
 
+html {
+  scroll-padding-top: 60px;
+}
+
 *,
 *::before,
 *::after {
@@ -72,6 +76,9 @@ img {
 /* ── Nav: Barra de navegación ───────────── */
 
 .navegacion {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   background-color: var(--uah-azul);
   padding: 10px 0;
   border-bottom: 4px solid var(--uah-amarillo);
@@ -97,6 +104,48 @@ img {
 
 .navegacion a:hover {
   color: var(--uah-amarillo);
+}
+
+/* ── Hamburger Button ─────────────────────── */
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.hamburger:focus-visible {
+  outline: 2px solid var(--uah-amarillo);
+  outline-offset: 2px;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background: var(--uah-azul);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* ── Footer: Pie de página ──────────────── */
@@ -228,30 +277,50 @@ img {
   }
 
   .navegacion {
+    position: relative;
     background-color: white;
     border-bottom: 1px solid #e2e2e2;
     padding: 0;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
   }
 
-  .navegacion ul {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 12px 15px;
-    gap: 20px;
-    justify-content: flex-start;
+  .hamburger {
+    display: flex;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
-  .navegacion ul::-webkit-scrollbar {
+  #nav-menu {
     display: none;
+    flex-direction: column;
+    width: 100%;
+    padding: 12px 15px;
+    gap: 6px;
+    background: white;
+    border-top: 1px solid #e2e2e2;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 99;
+  }
+
+  #nav-menu.open {
+    display: flex;
   }
 
   .navegacion a {
     color: var(--texto-oscuro);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    white-space: nowrap;
+    font-size: 0.95rem;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: normal;
+    padding: 8px 0;
+    display: block;
+    border-bottom: 1px solid #f0f0f0;
   }
 
   .navegacion a:hover {

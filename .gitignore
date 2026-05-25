@@ -30,6 +30,15 @@ npm-debug.log*
 # TypeScript build info
 *.tsbuildinfo
 
+# Test coverage
+coverage/
+
+# Editor / local tools
+.opencode/
+
+# SDD artifacts
+openspec/
+
 # Temporary files
 *.tmp
 *.temp

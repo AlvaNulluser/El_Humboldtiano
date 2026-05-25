@@ -1,7 +1,8 @@
 import rss from "@astrojs/rss";
+import type { APIRoute } from "astro";
 import { getArticles } from "../content/utils";
 
-export async function GET(context) {
+export const GET: APIRoute = async (context) => {
   const articles = await getArticles();
   articles.sort(
     (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
@@ -10,8 +11,8 @@ export async function GET(context) {
   return rss({
     title: "El Humboldtiano",
     description:
-      "Periódico universitario de la Universidad Alejandro de Humboldt. Cultura, arte, vida universitaria y más.",
-    site: context.site,
+      "Periódico Virtual de la Universidad Alejandro de Humboldt",
+    site: context.site ?? "https://el-humboldtiano.vercel.app",
     items: articles.map((article) => ({
       title: article.data.title,
       description:
@@ -24,4 +25,4 @@ export async function GET(context) {
     })),
     customData: `<language>es</language>`,
   });
-}
+};
