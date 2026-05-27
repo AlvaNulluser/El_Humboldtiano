@@ -8,6 +8,14 @@
       rel="stylesheet"
       href="https://unpkg.com/@staticcms/app@^3.0.0/dist/main.css"
     />
+    <script>
+      // StaticCMS resolves config.yml relative to the current path.
+      // Without a trailing slash (/admin instead of /admin/), it looks for
+      // config.yml at /config.yml instead of /admin/config.yml → 404.
+      if (window.location.pathname === "/admin" || window.location.pathname === "/admin/index.html") {
+        window.location.replace("/admin/");
+      }
+    </script>
   </head>
   <body>
     <script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
