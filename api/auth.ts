@@ -14,42 +14,48 @@
  *   3. Return HTML that posts the token back to the CMS parent window
  */
 
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || "";
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || "";
+const SCOPE = "repo,user";
 
-export default async function handler(request: Request): Promise<Response> {
-  if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
-    return new Response(
-      JSON.stringify({
-        error: "missing_env_vars",
-        message:
-          "GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET must be set in Vercel environment variables.",
-      }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+): Promise<void> {
+  // Only allow GET requests
+  if (req.method !== "GET") {
+    res.status(405).json({ error: "method_not_allowed" });
+    return;
   }
 
-  const url = new URL(request.url);
-  const code = url.searchParams.get("code");
+  if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
+    res.status(500).json({
+      error: "missing_env_vars",
+      message:
+        "GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET must be set in Vercel environment variables.",
+    });
+    return;
+  }
+
+  const protocol = req.headers["x-forwarded-proto"] || "https";
+  const host = req.headers.host || "el-humboldtiano.vercel.app";
+  const origin = `${protocol}://${host}`;
+
+  const code = req.query.code as string | undefined;
 
   // Step 1: No code yet → redirect to GitHub authorization page
   if (!code) {
-    // redirect_uri must point back to THIS same endpoint so GitHub
-    // returns here with the authorization code
-    const redirectUri = url.origin + "/api/auth";
-
+    const redirectUri = `${origin}/api/auth`;
     const params = new URLSearchParams({
       client_id: GITHUB_CLIENT_ID,
       redirect_uri: redirectUri,
-      scope: "repo,user",
+      scope: SCOPE,
     });
 
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: `https://github.com/login/oauth/authorize?${params.toString()}`,
-      },
-    });
+    res.redirect(302, `https://github.com/login/oauth/authorize?${params.toString()}`);
+    return;
   }
 
   // Step 2: Code received → exchange for access token
@@ -73,10 +79,8 @@ export default async function handler(request: Request): Promise<Response> {
     const tokenData = await tokenResponse.json();
 
     if (tokenData.error) {
-      return new Response(JSON.stringify({ error: tokenData.error }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      res.status(400).json({ error: tokenData.error });
+      return;
     }
 
     // Return an HTML page that posts the token back to the CMS parent window.
@@ -95,10 +99,6 @@ export default async function handler(request: Request): Promise<Response> {
       "*"
     );
   }
-  // Also support the Netlify-style callback for compatibility
-  if (window.opener && window.opener.netlify) {
-    window.opener.netlify.authenticate({ token: token });
-  }
   window.close();
 })();
 </script>
@@ -106,15 +106,9 @@ export default async function handler(request: Request): Promise<Response> {
 </body>
 </html>`;
 
-    return new Response(html, {
-      status: 200,
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    res.status(200).setHeader("Content-Type", "text/html; charset=utf-8").send(html);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: "token_exchange_failed", message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    res.status(500).json({ error: "token_exchange_failed", message });
   }
 }
