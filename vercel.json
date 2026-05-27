@@ -2,6 +2,9 @@
   "buildCommand": "astro build",
   "outputDirectory": "dist",
   "framework": "astro",
+  "routes": [
+    { "src": "/admin", "dest": "/admin/" }
+  ],
   "env": {
     "CMS_BACKEND_REPO": "AlvaNulluser/El_Humboldtiano",
     "SITE_URL": "https://el-humboldtiano2.vercel.app"

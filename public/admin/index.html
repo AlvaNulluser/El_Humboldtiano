@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Panel Editorial — El Humboldtiano</title>
+
+    <!-- Trailing-slash redirect: /admin → /admin/ -->
+    <script>
+      if (window.location.pathname === "/admin") {
+        window.location.replace("/admin/");
+      }
+    </script>
+
+    <!-- StaticCMS v3 stylesheet — required to render the CMS UI -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@staticcms/app@^3.0.0/dist/main.css"
+    />
+
     <style>
       body {
         margin: 0;
@@ -32,7 +46,9 @@
         color: #933;
         max-width: 420px;
       }
-      #error-msg h2 { margin-top: 0; }
+      #error-msg h2 {
+        margin-top: 0;
+      }
     </style>
   </head>
   <body>
@@ -46,27 +62,51 @@
     </div>
     <script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
     <script>
-      // Hide loader and initialize CMS once the script is ready
-      window.addEventListener("load", function () {
+      (function () {
         var loader = document.getElementById("loader");
         var errorEl = document.getElementById("error-msg");
         var errorDetail = document.getElementById("error-detail");
 
-        if (
-          typeof window.CMS !== "undefined" &&
-          typeof window.CMS.init === "function"
-        ) {
-          window.CMS.init();
-          if (loader) loader.style.display = "none";
-        } else {
-          // CMS failed to load
+        function showError(message) {
           if (loader) loader.style.display = "none";
           if (errorEl) errorEl.style.display = "block";
-          if (errorDetail)
-            errorDetail.textContent =
-              "StaticCMS no se cargó correctamente. Revisá la conexión y la configuración del backend.";
+          if (errorDetail) errorDetail.textContent = message;
         }
-      });
+
+        function hideLoaderAndShowCMS() {
+          if (loader) loader.style.display = "none";
+        }
+
+        // Only hide the loader once CMS.init() completes successfully.
+        // window.load alone is NOT enough — the CMS script may have
+        // failed to fetch or parse without ever exposing window.CMS.
+        window.addEventListener("load", function () {
+          if (
+            typeof window.CMS !== "undefined" &&
+            typeof window.CMS.init === "function"
+          ) {
+            try {
+              window.CMS.init();
+              hideLoaderAndShowCMS();
+            } catch (initErr) {
+              showError(
+                "Error al inicializar StaticCMS: " +
+                  (initErr instanceof Error
+                    ? initErr.message
+                    : "error desconocido") +
+                  ". Revisá la consola del navegador para más detalles.",
+              );
+            }
+          } else {
+            showError(
+              "StaticCMS no se cargó correctamente. " +
+                "Revisá la conexión a internet, " +
+                "la configuración del backend en config.yml " +
+                "y las variables de entorno en Vercel.",
+            );
+          }
+        });
+      })();
     </script>
   </body>
 </html>
