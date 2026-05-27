@@ -5,8 +5,6 @@ backend:
   base_url: https://el-humboldtiano2.vercel.app
   auth_endpoint: api/auth
 
-publish_mode: editorial_workflow
-
 media_folder: public/img
 public_folder: /img
 
@@ -98,6 +96,7 @@ collections:
         widget: select
         required: true
         default: Borrador
+        hint: "Etiqueta interna (no automatiza publicación). Para enviar a revisión, compartí el link del artículo."
         options:
           - Borrador
           - En revisión
