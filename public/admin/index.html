@@ -14,31 +14,57 @@
         justify-content: center;
         min-height: 100vh;
       }
-      .cargando {
+      #loader {
         text-align: center;
         color: #003366;
       }
-      .cargando h1 {
+      #loader h1 {
         font-size: 1.5rem;
         margin-bottom: 0.5rem;
       }
-      .cargando p {
+      #loader p {
         color: #666;
         font-size: 0.95rem;
       }
+      #error-msg {
+        display: none;
+        text-align: center;
+        color: #933;
+        max-width: 420px;
+      }
+      #error-msg h2 { margin-top: 0; }
     </style>
   </head>
   <body>
-    <div class="cargando" id="loader">
+    <div id="loader">
       <h1>Cargando panel editorial…</h1>
       <p>El Humboldtiano — Periódico Virtual UAH</p>
     </div>
+    <div id="error-msg">
+      <h2>No se pudo cargar el panel</h2>
+      <p id="error-detail"></p>
+    </div>
     <script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
     <script>
+      // Hide loader and initialize CMS once the script is ready
       window.addEventListener("load", function () {
         var loader = document.getElementById("loader");
-        if (loader) {
-          loader.style.display = "none";
+        var errorEl = document.getElementById("error-msg");
+        var errorDetail = document.getElementById("error-detail");
+
+        if (
+          typeof window.CMS !== "undefined" &&
+          typeof window.CMS.init === "function"
+        ) {
+          window.CMS.init();
+          if (loader) loader.style.display = "none";
+        } else {
+          // CMS failed to load
+          if (loader) loader.style.display = "none";
+          if (errorEl) errorEl.style.display = "block";
+          if (errorDetail)
+            errorDetail.textContent =
+              "StaticCMS no se cargó correctamente. Revisá la conexión y la configuración del backend.";
         }
       });
     </script>
