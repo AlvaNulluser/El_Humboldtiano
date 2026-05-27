@@ -19,7 +19,7 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     preview_path: articulo/{{slug}}
     editor:
-      preview: false
+      preview: true
     fields:
       - label: Título
         name: title
