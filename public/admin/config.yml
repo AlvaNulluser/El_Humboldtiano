@@ -1,7 +1,7 @@
 backend:
   name: github
   repo: AlvaNulluser/El_Humboldtiano
-  branch: feat/ux-overhaul-merge
+  branch: main
   base_url: https://el-humboldtiano2.vercel.app
   auth_endpoint: api/auth
 
