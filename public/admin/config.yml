@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: Jvske-max/El_Humboldtiano
-  branch: main
-  base_url: https://el-humboldtiano.vercel.app
+  repo: AlvaNulluser/El_Humboldtiano
+  branch: feat/ux-overhaul-merge
+  base_url: https://el-humboldtiano2.vercel.app
   auth_endpoint: api/auth
 
 publish_mode: editorial_workflow
