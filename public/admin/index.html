@@ -73,27 +73,24 @@
           if (errorDetail) errorDetail.textContent = message;
         }
 
-        // StaticCMS v3 auto-initializes when the script loads.
-        // It reads config.yml from the same directory as this HTML file.
-        // No manual CMS.init() call is needed — the library bootstraps itself.
-        // We only need to detect failure cases:
-        //   1. The script never loaded (CMS global missing)
-        //   2. The CMS rendered an error UI (which replaces our loader)
-        window.addEventListener("load", function () {
-          // Give CMS a moment to mount its React app, then check
-          setTimeout(function () {
-            // If CMS global exists, it auto-initialized — just hide our loader
-            if (typeof window.CMS !== "undefined") {
-              if (loader) loader.style.display = "none";
-              return;
-            }
-            // CMS script failed to load entirely
+        // StaticCMS v3 requires an explicit CMS.init() call to bootstrap.
+        // Without it, the script loads but never renders the UI → blank screen.
+        // autoInitialize: true (default) tells it to fetch config.yml automatically.
+        if (typeof window.CMS !== "undefined" && typeof window.CMS.init === "function") {
+          try {
+            window.CMS.init();
+            if (loader) loader.style.display = "none";
+          } catch (e) {
             showError(
-              "StaticCMS no se cargó correctamente. " +
-                "Revisá la conexión a internet y la configuración del backend en config.yml."
+              "Error al iniciar StaticCMS: " +
+                (e instanceof Error ? e.message : "error desconocido")
             );
-          }, 3000);
-        });
+          }
+        } else {
+          showError(
+            "StaticCMS no se cargó. Revisá la conexión y la consola del navegador."
+          );
+        }
       })();
     </script>
   </body>
