@@ -127,9 +127,10 @@ describe("api/auth", () => {
   // ── Scenario: No code param → 302 redirect to GitHub authorize ──────────
 
   describe("no code param — redirect to GitHub", () => {
-    it("returns 302 redirect to GitHub authorize URL", async () => {
+it("returns 302 redirect to GitHub authorize URL", async () => {
       vi.stubEnv("GITHUB_CLIENT_ID", "test-client-id");
-      vi.stubEnv("GITHUB_CLIENT_SECRET", "test-client-secret");
+      vi.stubEnv("GITHUB_CLIENT_SECRET", "test-test-secret");
+      vi.stubEnv("ALLOWED_ORIGINS", "https://example.com");
       vi.resetModules();
 
       const { default: handler } = await import("../../api/auth");
@@ -145,13 +146,14 @@ describe("api/auth", () => {
         "https://github.com/login/oauth/authorize",
       );
       expect(res._redirectUrl).toContain("client_id=test-client-id");
-      expect(res._redirectUrl).toContain("scope=repo%2Cuser");
+      expect(res._redirectUrl).toContain("scope=public_repo");
       expect(res._redirectUrl).toContain("redirect_uri=https%3A%2F%2Fexample.com%2Fapi%2Fauth");
     });
 
     it("uses x-forwarded-proto and host to build redirect_uri", async () => {
       vi.stubEnv("GITHUB_CLIENT_ID", "cid");
       vi.stubEnv("GITHUB_CLIENT_SECRET", "csec");
+      vi.stubEnv("ALLOWED_ORIGINS", "http://localhost:3000");
       vi.resetModules();
 
       const { default: handler } = await import("../../api/auth");

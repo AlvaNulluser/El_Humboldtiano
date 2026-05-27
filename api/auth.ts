@@ -24,7 +24,8 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || "";
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || "";
-const SCOPE = "repo,user";
+const SCOPE = "public_repo";
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://el-humboldtiano2.vercel.app").split(",");
 
 /**
  * Return an HTML error page. The popup expects HTML; returning JSON causes
@@ -86,6 +87,20 @@ export default async function handler(
 
   // ── Step 1: No code → redirect to GitHub authorization page ────────────
   if (!code) {
+    // Validate origin to prevent open redirect attacks
+    if (!ALLOWED_ORIGINS.includes(origin)) {
+      res
+        .status(403)
+        .setHeader("Content-Type", "text/html; charset=utf-8")
+        .send(
+          htmlErrorPage(
+            "Acceso denegado",
+            `Origin ${escapeHtml(origin)} is not allowed.`,
+          ),
+        );
+      return;
+    }
+
     const redirectUri = `${origin}/api/auth`;
     const params = new URLSearchParams({
       client_id: GITHUB_CLIENT_ID,

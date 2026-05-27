@@ -17,7 +17,7 @@ collections:
     folder: src/content/articles
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    preview_path: articulo/{{slug}}
+    preview_path: articulo/{{year}}-{{month}}-{{day}}-{{slug}}
     editor:
       preview: true
     fields:
@@ -38,6 +38,7 @@ collections:
       - label: Etiquetas
         name: tags
         widget: list
+        max: 5
         required: false
         field:
           name: tag
