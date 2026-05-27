@@ -73,38 +73,26 @@
           if (errorDetail) errorDetail.textContent = message;
         }
 
-        function hideLoaderAndShowCMS() {
-          if (loader) loader.style.display = "none";
-        }
-
-        // Only hide the loader once CMS.init() completes successfully.
-        // window.load alone is NOT enough — the CMS script may have
-        // failed to fetch or parse without ever exposing window.CMS.
+        // StaticCMS v3 auto-initializes when the script loads.
+        // It reads config.yml from the same directory as this HTML file.
+        // No manual CMS.init() call is needed — the library bootstraps itself.
+        // We only need to detect failure cases:
+        //   1. The script never loaded (CMS global missing)
+        //   2. The CMS rendered an error UI (which replaces our loader)
         window.addEventListener("load", function () {
-          if (
-            typeof window.CMS !== "undefined" &&
-            typeof window.CMS.init === "function"
-          ) {
-            try {
-              window.CMS.init();
-              hideLoaderAndShowCMS();
-            } catch (initErr) {
-              showError(
-                "Error al inicializar StaticCMS: " +
-                  (initErr instanceof Error
-                    ? initErr.message
-                    : "error desconocido") +
-                  ". Revisá la consola del navegador para más detalles.",
-              );
+          // Give CMS a moment to mount its React app, then check
+          setTimeout(function () {
+            // If CMS global exists, it auto-initialized — just hide our loader
+            if (typeof window.CMS !== "undefined") {
+              if (loader) loader.style.display = "none";
+              return;
             }
-          } else {
+            // CMS script failed to load entirely
             showError(
               "StaticCMS no se cargó correctamente. " +
-                "Revisá la conexión a internet, " +
-                "la configuración del backend en config.yml " +
-                "y las variables de entorno en Vercel.",
+                "Revisá la conexión a internet y la configuración del backend en config.yml."
             );
-          }
+          }, 3000);
         });
       })();
     </script>
