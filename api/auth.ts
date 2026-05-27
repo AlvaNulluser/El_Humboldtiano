@@ -24,7 +24,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || "";
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || "";
-const SCOPE = "public_repo";
+const SCOPE = "repo";
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://el-humboldtiano2.vercel.app").split(",");
 
 /**

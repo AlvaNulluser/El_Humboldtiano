@@ -146,7 +146,7 @@ it("returns 302 redirect to GitHub authorize URL", async () => {
         "https://github.com/login/oauth/authorize",
       );
       expect(res._redirectUrl).toContain("client_id=test-client-id");
-      expect(res._redirectUrl).toContain("scope=public_repo");
+      expect(res._redirectUrl).toContain("scope=repo");
       expect(res._redirectUrl).toContain("redirect_uri=https%3A%2F%2Fexample.com%2Fapi%2Fauth");
     });
 
