@@ -24,11 +24,36 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || "";
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || "";
-const SCOPE = "repo,user";
+const SCOPE = "repo";
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://el-humboldtiano.vercel.app").split(",");
+
+/**
+ * Return an HTML error page. The popup expects HTML; returning JSON causes
+ * an opaque blank page instead of a visible error.
+ */
+function htmlErrorPage(title: string, detail: string): string {
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>${escapeHtml(title)}</title></head>
+<body>
+  <h1>${escapeHtml(title)}</h1>
+  <p>${escapeHtml(detail)}</p>
+</body>
+</html>`;
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 export default async function handler(
   req: VercelRequest,
-  res: VercelResponse
+  res: VercelResponse,
 ): Promise<void> {
   // Only allow GET requests
   if (req.method !== "GET") {
@@ -36,12 +61,21 @@ export default async function handler(
     return;
   }
 
+  // ── Missing environment variables → HTML error page ────────────────────
   if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
-    res.status(500).json({
-      error: "missing_env_vars",
-      message:
-        "GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET must be set in Vercel environment variables.",
-    });
+    const missing: string[] = [];
+    if (!GITHUB_CLIENT_ID) missing.push("GITHUB_CLIENT_ID");
+    if (!GITHUB_CLIENT_SECRET) missing.push("GITHUB_CLIENT_SECRET");
+
+    res
+      .status(500)
+      .setHeader("Content-Type", "text/html; charset=utf-8")
+      .send(
+        htmlErrorPage(
+          "Error de configuración",
+          `missing_env_vars: ${missing.join(", ")} must be set in Vercel environment variables.`,
+        ),
+      );
     return;
   }
 
@@ -51,10 +85,22 @@ export default async function handler(
 
   const code = req.query.code as string | undefined;
 
-  const code = req.query.code as string | undefined;
-
   // ── Step 1: No code → redirect to GitHub authorization page ────────────
   if (!code) {
+    // Validate origin to prevent open redirect attacks
+    if (!ALLOWED_ORIGINS.includes(origin)) {
+      res
+        .status(403)
+        .setHeader("Content-Type", "text/html; charset=utf-8")
+        .send(
+          htmlErrorPage(
+            "Acceso denegado",
+            `Origin ${escapeHtml(origin)} is not allowed.`,
+          ),
+        );
+      return;
+    }
+
     const redirectUri = `${origin}/api/auth`;
     const params = new URLSearchParams({
       client_id: GITHUB_CLIENT_ID,
@@ -62,7 +108,10 @@ export default async function handler(
       scope: SCOPE,
     });
 
-    res.redirect(302, `https://github.com/login/oauth/authorize?${params.toString()}`);
+    res.redirect(
+      302,
+      `https://github.com/login/oauth/authorize?${params.toString()}`,
+    );
     return;
   }
 
@@ -87,7 +136,15 @@ export default async function handler(
     const tokenData = await tokenResponse.json();
 
     if (tokenData.error) {
-      res.status(400).json({ error: tokenData.error });
+      res
+        .status(400)
+        .setHeader("Content-Type", "text/html; charset=utf-8")
+        .send(
+          htmlErrorPage(
+            "Error de autenticación",
+            `GitHub returned: ${tokenData.error}${tokenData.error_description ? ` — ${tokenData.error_description}` : ""}`,
+          ),
+        );
       return;
     }
 
@@ -100,25 +157,35 @@ export default async function handler(
 <head><meta charset="utf-8"><title>Autenticando…</title></head>
 <body>
 <script>
-(function() {
-  var token = ${JSON.stringify(tokenData.access_token)};
-  // Post the token back to the StaticCMS parent window
-  if (window.opener) {
-    window.opener.postMessage(
-      { type: "authorization", token: token },
-      "*"
-    );
-  }
-  window.close();
-})();
+  (function() {
+    // Handshake — tells CMS parent the popup is ready
+    if (window.opener) {
+      window.opener.postMessage("authorizing:github", "*");
+    }
+    // Success — NetlifyAuthenticator expects the string format:
+    // "authorization:github:success:{json}"
+    var authData = JSON.stringify({token: ${JSON.stringify(tokenData.access_token)}, provider: "github"});
+    if (window.opener) {
+      window.opener.postMessage("authorization:github:success:" + authData, "*");
+    }
+    window.close();
+  })();
 </script>
 <p>Autenticado. Cerrando ventana…</p>
 </body>
 </html>`;
 
-    res.status(200).setHeader("Content-Type", "text/html; charset=utf-8").send(html);
+    res
+      .status(200)
+      .setHeader("Content-Type", "text/html; charset=utf-8")
+      .send(html);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    res.status(500).json({ error: "token_exchange_failed", message });
+    res
+      .status(500)
+      .setHeader("Content-Type", "text/html; charset=utf-8")
+      .send(
+        htmlErrorPage("Error interno", `Token exchange failed: ${message}`),
+      );
   }
 }
