@@ -1,97 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Panel Editorial — El Humboldtiano</title>
-
-    <!-- Trailing-slash redirect: /admin → /admin/ -->
-    <script>
-      if (window.location.pathname === "/admin") {
-        window.location.replace("/admin/");
-      }
-    </script>
-
-    <!-- StaticCMS v3 stylesheet — required to render the CMS UI -->
     <link
       rel="stylesheet"
       href="https://unpkg.com/@staticcms/app@^3.0.0/dist/main.css"
     />
-
-    <style>
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, sans-serif;
-        background: #f9f9f9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-      }
-      #loader {
-        text-align: center;
-        color: #003366;
-      }
-      #loader h1 {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-      }
-      #loader p {
-        color: #666;
-        font-size: 0.95rem;
-      }
-      #error-msg {
-        display: none;
-        text-align: center;
-        color: #933;
-        max-width: 420px;
-      }
-      #error-msg h2 {
-        margin-top: 0;
-      }
-    </style>
   </head>
   <body>
-    <div id="loader">
-      <h1>Cargando panel editorial…</h1>
-      <p>El Humboldtiano — Periódico Virtual UAH</p>
-    </div>
-    <div id="error-msg">
-      <h2>No se pudo cargar el panel</h2>
-      <p id="error-detail"></p>
-    </div>
     <script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
     <script>
-      (function () {
-        var loader = document.getElementById("loader");
-        var errorEl = document.getElementById("error-msg");
-        var errorDetail = document.getElementById("error-detail");
-
-        function showError(message) {
-          if (loader) loader.style.display = "none";
-          if (errorEl) errorEl.style.display = "block";
-          if (errorDetail) errorDetail.textContent = message;
-        }
-
-        // StaticCMS v3 requires an explicit CMS.init() call to bootstrap.
-        // Without it, the script loads but never renders the UI → blank screen.
-        // autoInitialize: true (default) tells it to fetch config.yml automatically.
-        if (typeof window.CMS !== "undefined" && typeof window.CMS.init === "function") {
-          try {
-            window.CMS.init();
-            if (loader) loader.style.display = "none";
-          } catch (e) {
-            showError(
-              "Error al iniciar StaticCMS: " +
-                (e instanceof Error ? e.message : "error desconocido")
-            );
-          }
-        } else {
-          showError(
-            "StaticCMS no se cargó. Revisá la conexión y la consola del navegador."
-          );
-        }
-      })();
+      window.CMS.init();
     </script>
   </body>
 </html>
