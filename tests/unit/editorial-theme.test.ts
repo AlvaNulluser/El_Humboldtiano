@@ -105,4 +105,32 @@ describe("Editorial Theme Configuration & Resolution", () => {
       expect(resolveTheme(undefined)).toBe("modern");
     });
   });
+
+  describe("Instant Rollback Mechanism", () => {
+    it("should immediately fall back to 'classic' when defaultTheme is changed to 'classic'", () => {
+      const originalDefault = EDITORIAL_CONFIG.defaultTheme;
+      try {
+        EDITORIAL_CONFIG.defaultTheme = "classic";
+        expect(resolveTheme()).toBe("classic");
+      } finally {
+        EDITORIAL_CONFIG.defaultTheme = originalDefault;
+      }
+    });
+
+    it("should allow instant preview of classic theme via ?theme=classic override", () => {
+      const previewUrl = new URL("https://elhumboldtiano.uah.ve/?theme=classic");
+      expect(resolveTheme(previewUrl)).toBe("classic");
+    });
+
+    it("should disable runtime toggle when allowRuntimeToggle is false", () => {
+      const originalToggle = EDITORIAL_CONFIG.allowRuntimeToggle;
+      try {
+        EDITORIAL_CONFIG.allowRuntimeToggle = false;
+        const overrideUrl = new URL("https://elhumboldtiano.uah.ve/?theme=classic");
+        expect(resolveTheme(overrideUrl)).toBe("modern");
+      } finally {
+        EDITORIAL_CONFIG.allowRuntimeToggle = originalToggle;
+      }
+    });
+  });
 });
