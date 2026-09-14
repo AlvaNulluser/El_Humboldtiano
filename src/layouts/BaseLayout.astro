@@ -1,8 +1,9 @@
 ---
-// BaseLayout.astro — Layout base con SEO meta tags y estilos globales
+// BaseLayout.astro — Layout base con SEO meta tags, theming editorial y estilos globales
 // Props: title, description, image (todas opcionales)
 
 import "../styles/global.css";
+import { resolveTheme } from "../config/editorial";
 
 export interface Props {
   title?: string;
@@ -16,12 +17,14 @@ const {
   image = "/src/assets/image-pred.jpg",
 } = Astro.props;
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = image.startsWith("http") ? image : new URL(image, Astro.site).href;
+const activeTheme = resolveTheme(Astro.url);
+const baseUrl = Astro.site || "https://el-humboldtiano.vercel.app";
+const canonicalUrl = new URL(Astro.url.pathname, baseUrl).href;
+const ogImage = image.startsWith("http") ? image : new URL(image, baseUrl).href;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme={activeTheme}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,13 +47,36 @@ const ogImage = image.startsWith("http") ? image : new URL(image, Astro.site).hr
 
     <title>{title}</title>
 
-    <!-- Google Fonts: Merriweather -->
+    <!-- Google Fonts: Preconnect hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Fonts: Merriweather, Newsreader, Plus Jakarta Sans with font-display: swap -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;0,6..72,800;1,6..72,400;1,6..72,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     <slot />
+    <script is:inline>
+      (function () {
+        const params = new URLSearchParams(window.location.search);
+        const theme = params.get("theme");
+        if (theme) {
+          document.addEventListener("DOMContentLoaded", function () {
+            const links = document.querySelectorAll('a[href^="/"]');
+            links.forEach(function (link) {
+              const href = link.getAttribute("href");
+              if (href && !href.startsWith("//") && !href.includes("theme=")) {
+                const sep = href.includes("?") ? "&" : "?";
+                link.setAttribute("href", href + sep + "theme=" + encodeURIComponent(theme));
+              }
+            });
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

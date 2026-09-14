@@ -15,11 +15,119 @@ import { CATEGORIES } from "../utils/slugify";
     <span></span>
   </button>
   <ul id="nav-menu">
-    {CATEGORIES.map((cat) => (
-      <li><a href={`/categoria/${cat.slug}/1`}>{cat.name}</a></li>
-    ))}
+    {
+      CATEGORIES.map((cat) => (
+        <li>
+          <a href={`/categoria/${cat.slug}/1`}>{cat.name}</a>
+        </li>
+      ))
+    }
   </ul>
 </nav>
+
+<style>
+  /* ── Modern Broadsheet Navigation Scoped Styles ── */
+
+  :global([data-theme="modern"]) .navegacion {
+    background-color: var(--editorial-paper);
+    border-top: 1px solid var(--editorial-hairline);
+    border-bottom: 1px solid var(--editorial-hairline);
+    padding: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  }
+
+  :global([data-theme="modern"]) .navegacion ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  :global([data-theme="modern"]) .navegacion li {
+    display: flex;
+    align-items: center;
+  }
+
+  :global([data-theme="modern"]) .navegacion li + li {
+    border-left: 1px solid var(--editorial-hairline);
+  }
+
+  :global([data-theme="modern"]) .navegacion a {
+    color: var(--editorial-ink);
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  :global([data-theme="modern"]) .navegacion a:hover {
+    color: var(--editorial-gold);
+    background-color: rgba(180, 83, 9, 0.04);
+  }
+
+  :global([data-theme="modern"]) .navegacion a:focus-visible {
+    outline: 2px solid var(--editorial-navy);
+    outline-offset: -2px;
+  }
+
+  /* Hamburger in modern mode */
+  :global([data-theme="modern"]) .hamburger {
+    width: 44px;
+    height: 44px;
+  }
+
+  :global([data-theme="modern"]) .hamburger span {
+    background: var(--editorial-navy);
+  }
+
+  :global([data-theme="modern"]) .hamburger:focus-visible {
+    outline: 2px solid var(--editorial-navy);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    :global([data-theme="modern"]) .navegacion {
+      min-height: 48px;
+      padding: 0 12px;
+    }
+
+    :global([data-theme="modern"]) #nav-menu {
+      background: var(--editorial-paper);
+      border-top: 1px solid var(--editorial-hairline);
+      border-bottom: 2px solid var(--editorial-rule-dark);
+      padding: 8px 16px;
+      gap: 0;
+    }
+
+    :global([data-theme="modern"]) #nav-menu li {
+      width: 100%;
+      border-left: none;
+      border-bottom: 1px solid var(--editorial-hairline);
+    }
+
+    :global([data-theme="modern"]) #nav-menu li:last-child {
+      border-bottom: none;
+    }
+
+    :global([data-theme="modern"]) #nav-menu a {
+      justify-content: flex-start;
+      padding: 12px 8px;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+  }
+</style>
 
 <script>
   const hamburger = document.querySelector(".hamburger") as HTMLButtonElement | null;

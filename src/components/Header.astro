@@ -1,18 +1,104 @@
 ---
-// Header.astro — Mástil del periódico con doble borde y título centrado
+// Header.astro — Mástil del periódico con dateline bar broadsheet y soporte clásico
+const currentDate = new Date().toLocaleDateString("es-VE", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const formattedDate = currentDate.charAt(0).toUpperCase() + currentDate.slice(1);
 ---
 
-<header class="encabezado">
-  <div class="fecha">
-    {new Date().toLocaleDateString("es-VE", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })}
+<header class="encabezado" role="banner">
+  <!-- Broadsheet Modern Dateline Bar -->
+  <div class="dateline-bar modern-only">
+    <span class="dateline-date">{formattedDate}</span>
+    <span class="dateline-location">Caracas, Venezuela</span>
+    <span class="dateline-edition">Edición Digital</span>
   </div>
+
+  <!-- Classic layout elements -->
+  <div class="fecha classic-only">
+    {formattedDate}
+  </div>
+
   <h1 class="titulo-principal">
     <a href="/">El Humboldtiano</a>
   </h1>
-  <div class="edicion">Edición Digital</div>
+
+  <div class="edicion classic-only">Edición Digital</div>
 </header>
+
+<style>
+  /* Base visibility */
+  .modern-only {
+    display: none;
+  }
+
+  /* When modern theme is active on html root */
+  :global([data-theme="modern"]) .classic-only {
+    display: none !important;
+  }
+
+  :global([data-theme="modern"]) .modern-only {
+    display: flex;
+  }
+
+  :global([data-theme="modern"]) .encabezado {
+    text-align: center;
+    padding: 0;
+    border-bottom: 2px solid var(--editorial-rule-dark);
+    background-color: var(--editorial-paper);
+  }
+
+  :global([data-theme="modern"]) .dateline-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px;
+    border-top: 1px solid var(--editorial-hairline);
+    border-bottom: 1px solid var(--editorial-hairline);
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--editorial-muted);
+    font-weight: 600;
+  }
+
+  :global([data-theme="modern"]) .titulo-principal {
+    font-family: var(--editorial-font-display);
+    font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+    font-weight: 800;
+    margin: 16px 0 14px;
+    color: var(--editorial-navy);
+    letter-spacing: -0.5px;
+    text-transform: none;
+    line-height: 1.05;
+  }
+
+  :global([data-theme="modern"]) .titulo-principal a {
+    color: var(--editorial-navy);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  :global([data-theme="modern"]) .titulo-principal a:hover {
+    color: var(--editorial-gold);
+  }
+
+  @media (max-width: 768px) {
+    :global([data-theme="modern"]) .dateline-bar {
+      flex-direction: column;
+      gap: 4px;
+      padding: 6px 12px;
+      font-size: 0.72rem;
+    }
+
+    :global([data-theme="modern"]) .titulo-principal {
+      font-size: 2.2rem;
+      margin: 12px 0 10px;
+    }
+  }
+</style>
