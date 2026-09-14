@@ -1,18 +1,10 @@
 /* ========================================
-   El Humboldtiano — Design Tokens + Base
+   El Humboldtiano — Design Tokens & Theming
    ======================================== */
 
-:root {
-  /* Paleta institucional UAH */
-  --uah-azul: #003366;
-  --uah-amarillo: #ffb300;
-  --texto-oscuro: #333333;
-  --fondo-claro: #f9f9f9;
+@import "./tokens/classic.css";
+@import "./tokens/modern.css";
 
-  /* Tipografía */
-  --fuente-serif: "Merriweather", serif;
-  --fuente-sans: system-ui, -apple-system, sans-serif;
-}
 
 /* ── Reset & Base ───────────────────────── */
 
@@ -42,6 +34,35 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* ── Focus indicators & Accessibility ──── */
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring-color, #ffb300);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: var(--uah-azul);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  z-index: 9999;
+  font-family: var(--fuente-sans);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  transition: top 0.2s ease-in-out;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--focus-ring-color, #ffb300);
+  outline-offset: 2px;
 }
 
 /* ── Header: Masthead ───────────────────── */

@@ -1,0 +1,23 @@
+/* ========================================
+   Tokens: Classic Theme (Legacy UAH)
+   Preserves 100% backward-compatibility
+   ======================================== */
+
+:root,
+[data-theme="classic"] {
+  /* Paleta institucional UAH */
+  --uah-azul: #003366;
+  --uah-amarillo: #ffb300;
+  --texto-oscuro: #333333;
+  --fondo-claro: #f9f9f9;
+
+  /* Tipografía */
+  --fuente-serif: "Merriweather", serif;
+  --fuente-sans: system-ui, -apple-system, sans-serif;
+
+  /* Sombras y bordes legados */
+  --sombra-tarjeta: 0 10px 20px rgba(0, 0, 0, 0.05);
+  --borde-tarjeta: 1px solid #e2e2e2;
+  --borde-accento: 3px solid var(--uah-amarillo);
+  --focus-ring-color: var(--uah-amarillo);
+}
