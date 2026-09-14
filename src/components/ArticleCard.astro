@@ -57,3 +57,86 @@ const altText = coverImage
     </a>
   </div>
 </article>
+
+<style>
+  /* ── Modern Broadsheet Article Card Scoped Styles ── */
+
+  :global([data-theme="modern"]) .tarjeta-noticia {
+    background: var(--editorial-surface);
+    border: 1px solid var(--editorial-hairline);
+    box-shadow: none;
+    border-radius: 0;
+    transition: border-color 0.2s ease;
+  }
+
+  :global([data-theme="modern"]) .tarjeta-noticia:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #c4c1b7;
+  }
+
+  :global([data-theme="modern"]) .tarjeta-noticia img {
+    border-bottom: 1px solid var(--editorial-hairline);
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  :global([data-theme="modern"]) .tarjeta-contenido {
+    padding: 20px;
+  }
+
+  :global([data-theme="modern"]) .etiqueta-categoria {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--editorial-gold);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+
+  :global([data-theme="modern"]) .tarjeta-contenido h3 {
+    font-family: var(--editorial-font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--editorial-ink);
+    line-height: 1.3;
+    margin: 0 0 10px 0;
+  }
+
+  :global([data-theme="modern"]) .tarjeta-contenido h3 a {
+    color: var(--editorial-ink);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  :global([data-theme="modern"]) .tarjeta-contenido h3 a:hover {
+    color: var(--editorial-gold);
+  }
+
+  :global([data-theme="modern"]) .tarjeta-contenido .meta-info {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.8rem;
+    color: var(--editorial-muted);
+    margin-bottom: 14px;
+  }
+
+  :global([data-theme="modern"]) .tarjeta-enlace {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--editorial-navy);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 24px;
+    transition: color 0.15s ease;
+  }
+
+  :global([data-theme="modern"]) .tarjeta-enlace:hover {
+    color: var(--editorial-gold);
+  }
+</style>

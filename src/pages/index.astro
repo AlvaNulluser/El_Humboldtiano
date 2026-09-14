@@ -26,7 +26,7 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
   <Header />
   <Nav />
 
-  <main>
+  <main id="main-content">
     {
       articles.length === 0 ? (
         <section class="sin-articulos">
@@ -313,6 +313,171 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
 
     .cuadricula-noticias {
       grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Modern Broadsheet Scoped Styles ─────── */
+
+  :global([data-theme="modern"]) main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 36px 20px 64px;
+  }
+
+  :global([data-theme="modern"]) .destacado {
+    border-bottom: 2px solid var(--editorial-rule-dark);
+    padding-bottom: 40px;
+    margin-bottom: 48px;
+  }
+
+  :global([data-theme="modern"]) .articulo-principal {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 40px;
+    background: transparent;
+    border: none;
+    margin-bottom: 0;
+    align-items: center;
+  }
+
+  :global([data-theme="modern"]) .destacado-imagen img {
+    border: 1px solid var(--editorial-hairline);
+    border-right: 1px solid var(--editorial-hairline);
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+  }
+
+  :global([data-theme="modern"]) .destacado-contenido {
+    padding: 0;
+  }
+
+  :global([data-theme="modern"]) .destacado-contenido .etiqueta-categoria {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--editorial-gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
+  :global([data-theme="modern"]) .destacado-contenido h2 {
+    font-family: var(--editorial-font-display);
+    font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--editorial-ink);
+    margin: 0 0 14px 0;
+    letter-spacing: -0.5px;
+  }
+
+  :global([data-theme="modern"]) .destacado-contenido h2 a {
+    color: var(--editorial-ink);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  :global([data-theme="modern"]) .destacado-contenido h2 a:hover {
+    color: var(--editorial-gold);
+  }
+
+  :global([data-theme="modern"]) .destacado-contenido .meta-info {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.85rem;
+    color: var(--editorial-muted);
+    margin-bottom: 16px;
+  }
+
+  :global([data-theme="modern"]) .resumen {
+    font-family: var(--editorial-font-body);
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: #374151;
+    margin-bottom: 24px;
+  }
+
+  :global([data-theme="modern"]) .leer-mas {
+    background: var(--editorial-navy);
+    color: #ffffff;
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 26px;
+    transition: background-color 0.15s ease;
+  }
+
+  :global([data-theme="modern"]) .leer-mas:hover {
+    background: var(--editorial-gold);
+    color: #ffffff;
+  }
+
+  :global([data-theme="modern"]) .titulo-seccion {
+    font-family: var(--editorial-font-display);
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--editorial-ink);
+    border-left: none;
+    border-bottom: 1px solid var(--editorial-rule-dark);
+    padding-left: 0;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    letter-spacing: -0.2px;
+  }
+
+  :global([data-theme="modern"]) .secundarios {
+    border-bottom: 1px solid var(--editorial-hairline);
+    padding-bottom: 48px;
+    margin-bottom: 48px;
+  }
+
+  :global([data-theme="modern"]) .seccion-categoria {
+    border-bottom: 1px solid var(--editorial-hairline);
+    padding-bottom: 40px;
+    margin-top: 48px;
+  }
+
+  :global([data-theme="modern"]) .ver-mas {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--editorial-navy);
+    transition: color 0.15s ease;
+  }
+
+  :global([data-theme="modern"]) .ver-mas:hover {
+    color: var(--editorial-gold);
+  }
+
+  @media (max-width: 768px) {
+    :global([data-theme="modern"]) .destacado {
+      padding-bottom: 28px;
+      margin-bottom: 32px;
+    }
+
+    :global([data-theme="modern"]) .articulo-principal {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    :global([data-theme="modern"]) .destacado-imagen img {
+      border: 1px solid var(--editorial-hairline);
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+
+    :global([data-theme="modern"]) .destacado-contenido {
+      padding: 0;
+    }
+
+    :global([data-theme="modern"]) .destacado-contenido h2 {
+      font-size: 1.65rem;
     }
   }
 </style>

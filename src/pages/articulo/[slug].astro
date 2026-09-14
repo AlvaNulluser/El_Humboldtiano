@@ -67,12 +67,15 @@ const currentArticle: ProcessedArticle = {
   <Header />
   <Nav />
 
-  <main class="articulo-completo">
+  <main class="articulo-completo" id="main-content">
     <Breadcrumbs items={breadcrumbItems} />
     <article>
       <header class="articulo-cabecera">
         <span class="etiqueta-categoria">{data.category}</span>
         <h1>{data.title}</h1>
+        {data.resumen && (
+          <p class="articulo-resumen-lead modern-only">{data.resumen}</p>
+        )}
 
         <div class="articulo-meta">
           <p class="autor">Por <strong>{data.author}</strong></p>
@@ -275,5 +278,149 @@ const currentArticle: ProcessedArticle = {
     .articulo-cuerpo {
       font-size: 1.05rem;
     }
+  }
+
+  /* ── Modern Broadsheet Longform Scoped Styles ── */
+
+  .modern-only {
+    display: none;
+  }
+
+  :global([data-theme="modern"]) .modern-only {
+    display: block;
+  }
+
+  :global([data-theme="modern"]) .articulo-completo {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 36px 20px 72px;
+  }
+
+  :global([data-theme="modern"]) .articulo-cabecera {
+    margin-bottom: 28px;
+  }
+
+  :global([data-theme="modern"]) .articulo-cabecera .etiqueta-categoria {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--editorial-gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  :global([data-theme="modern"]) .articulo-cabecera h1 {
+    font-family: var(--editorial-font-display);
+    font-size: clamp(2.2rem, 4.5vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.12;
+    color: var(--editorial-ink);
+    letter-spacing: -0.5px;
+    margin: 12px 0 16px;
+  }
+
+  :global([data-theme="modern"]) .articulo-resumen-lead {
+    font-family: var(--editorial-font-body);
+    font-size: 1.22rem;
+    line-height: 1.6;
+    color: #374151;
+    margin: 0 0 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--editorial-hairline);
+    font-weight: 400;
+  }
+
+  :global([data-theme="modern"]) .articulo-meta {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.82rem;
+    color: var(--editorial-muted);
+    border-bottom: 1px solid var(--editorial-hairline);
+    padding-bottom: 14px;
+    margin-bottom: 24px;
+  }
+
+  :global([data-theme="modern"]) .autor strong {
+    color: var(--editorial-navy);
+  }
+
+  :global([data-theme="modern"]) .fecha time {
+    color: var(--editorial-ink);
+  }
+
+  :global([data-theme="modern"]) .etiqueta-tag {
+    background: var(--editorial-navy);
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.72rem;
+    letter-spacing: 0.8px;
+  }
+
+  :global([data-theme="modern"]) .articulo-imagen img {
+    border: 1px solid var(--editorial-hairline);
+  }
+
+  :global([data-theme="modern"]) .articulo-cuerpo {
+    font-family: var(--editorial-font-body);
+    font-size: 1.15rem;
+    line-height: 1.85;
+    color: var(--editorial-ink);
+  }
+
+  /* 3-line drop cap on the opening body paragraph */
+  :global([data-theme="modern"]) .articulo-cuerpo > :global(p:first-of-type::first-letter) {
+    font-family: var(--editorial-font-display);
+    font-size: 4.2rem;
+    line-height: 0.85;
+    float: left;
+    margin-top: 6px;
+    margin-right: 12px;
+    margin-bottom: -4px;
+    font-weight: 800;
+    color: var(--editorial-navy);
+  }
+
+  :global([data-theme="modern"]) .articulo-cuerpo :global(h2) {
+    font-family: var(--editorial-font-display);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--editorial-ink);
+    letter-spacing: -0.3px;
+    margin-top: 40px;
+    margin-bottom: 16px;
+  }
+
+  :global([data-theme="modern"]) .articulo-cuerpo :global(h3) {
+    font-family: var(--editorial-font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--editorial-ink);
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  :global([data-theme="modern"]) .articulo-cuerpo :global(blockquote) {
+    border-left: 4px solid var(--editorial-gold);
+    background: rgba(180, 83, 9, 0.04);
+    font-family: var(--editorial-font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--editorial-navy);
+    padding: 16px 24px;
+    margin: 32px 0;
+  }
+
+  :global([data-theme="modern"]) .articulo-cuerpo :global(a) {
+    color: var(--editorial-navy);
+    text-decoration: underline;
+    text-decoration-color: var(--editorial-gold);
+    text-underline-offset: 3px;
+  }
+
+  :global([data-theme="modern"]) .articulo-cuerpo :global(a:hover) {
+    color: var(--editorial-gold);
+  }
+
+  :global([data-theme="modern"]) .articulo-cuerpo :global(hr) {
+    border-top: 1px solid var(--editorial-hairline);
   }
 </style>

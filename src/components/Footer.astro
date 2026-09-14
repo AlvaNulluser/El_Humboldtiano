@@ -10,3 +10,46 @@
     <!-- Social links will be added when accounts are available -->
   </div>
 </footer>
+
+<style>
+  /* ── Modern Broadsheet Footer Scoped Styles ── */
+
+  :global([data-theme="modern"]) .pie-pagina {
+    background-color: var(--editorial-paper);
+    color: var(--editorial-muted);
+    border-top: 1px solid var(--editorial-hairline);
+    padding: 40px 20px;
+    margin-top: 60px;
+  }
+
+  :global([data-theme="modern"]) .pie-pagina p {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.82rem;
+    color: var(--editorial-muted);
+    opacity: 1;
+    margin: 6px 0;
+  }
+
+  :global([data-theme="modern"]) .pie-pagina a {
+    color: var(--editorial-navy);
+    font-family: var(--editorial-font-kicker);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  :global([data-theme="modern"]) .pie-pagina a:hover {
+    color: var(--editorial-gold);
+  }
+
+  :global([data-theme="modern"]) .pie-pagina .social-links a {
+    color: var(--editorial-navy);
+  }
+
+  :global([data-theme="modern"]) .pie-pagina .social-links a:hover {
+    color: var(--editorial-gold);
+  }
+</style>
