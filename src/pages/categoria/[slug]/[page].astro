@@ -8,7 +8,7 @@ import Footer from "../../../components/Footer.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import ArticleCard from "../../../components/ArticleCard.astro";
 import { getArticles, type ProcessedArticle } from "../../../content/utils";
-import { CATEGORIES, slugify, deslugify } from "../../../utils/slugify";
+import { CATEGORIES, deslugify } from "../../../utils/slugify";
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const articles = await getArticles();

@@ -47,6 +47,8 @@ const pageTitle = "Buscar — El Humboldtiano";
 </BaseLayout>
 
 <script>
+  import type { SearchDoc } from "../utils/search";
+
   const input = document.getElementById("buscar-input") as HTMLInputElement;
   const resultsEl = document.getElementById("buscar-resultados")!;
 
@@ -57,7 +59,7 @@ const pageTitle = "Buscar — El Humboldtiano";
     </div>
   `;
 
-  function resultCard(doc: any): string {
+  function resultCard(doc: SearchDoc): string {
     return `
       <article class="buscar-tarjeta">
         <span class="etiqueta-categoria">${escapeHtml(doc.category)}</span>
@@ -74,13 +76,13 @@ const pageTitle = "Buscar — El Humboldtiano";
     return div.innerHTML;
   }
 
-  function matches(doc: any, query: string): boolean {
+  function matches(doc: SearchDoc, query: string): boolean {
     const q = query.toLowerCase();
     const fields = [doc.title, doc.resumen, doc.body, ...doc.tags, doc.author, doc.category];
     return fields.some((f) => (f || "").toLowerCase().includes(q));
   }
 
-  function renderResults(docs: any[], query: string): void {
+  function renderResults(docs: SearchDoc[], query: string): void {
     if (!query.trim()) {
       resultsEl.innerHTML = "";
       return;
@@ -100,7 +102,7 @@ const pageTitle = "Buscar — El Humboldtiano";
     resultsEl.prepend(countEl);
   }
 
-  let docs: any[] = [];
+  let docs: SearchDoc[] = [];
   let debounceTimer: ReturnType<typeof setTimeout>;
 
   function debouncedSearch(query: string): void {

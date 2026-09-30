@@ -6,7 +6,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import ArticleCard from "../components/ArticleCard.astro";
 import { getArticles } from "../content/utils";
-import { CATEGORIES, deslugify } from "../utils/slugify";
+import { CATEGORIES } from "../utils/slugify";
 import { Image } from "astro:assets";
 import fallbackImg from "../assets/image-pred.jpg";
 
@@ -26,7 +26,7 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
   <Header />
   <Nav />
 
-  <main>
+  <main id="main-content">
     {
       articles.length === 0 ? (
         <section class="sin-articulos">
@@ -148,7 +148,7 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
   main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 36px 20px 64px;
   }
 
   /* ── Sin artículos ──────────────────────── */
@@ -158,94 +158,127 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
   }
 
   .sin-articulos h2 {
+    font-family: var(--editorial-font-display);
     font-size: 2rem;
-    color: var(--uah-azul);
+    color: var(--editorial-navy);
     margin-bottom: 10px;
   }
 
   .sin-articulos p {
-    color: #666;
+    color: var(--editorial-muted);
     font-size: 1.1rem;
   }
 
-  /* ── Destacado ──────────────────────────── */
+  /* ── Destacado Broadsheet ───────────────── */
+  .destacado {
+    border-bottom: 2px solid var(--editorial-rule-dark);
+    padding-bottom: 40px;
+    margin-bottom: 48px;
+  }
+
   .articulo-principal {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.25fr 1fr;
     gap: 40px;
-    background: white;
-    border: 1px solid #e2e2e2;
-    margin-bottom: 50px;
+    background: transparent;
+    border: none;
+    margin-bottom: 0;
+    align-items: center;
   }
 
   .destacado-imagen img {
-    width: 100%;
-    height: 100%;
+    border: 1px solid var(--editorial-hairline);
+    aspect-ratio: 16 / 9;
     object-fit: cover;
-    border-right: 4px solid var(--uah-amarillo);
+    width: 100%;
+    height: auto;
   }
 
   .destacado-contenido {
-    padding: 40px 40px 40px 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 
+  .destacado-contenido .etiqueta-categoria {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--editorial-gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
   .destacado-contenido h2 {
-    font-size: 2.2rem;
-    margin: 10px 0 15px;
-    line-height: 1.2;
-    color: var(--texto-oscuro);
+    font-family: var(--editorial-font-display);
+    font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--editorial-ink);
+    margin: 0 0 14px 0;
+    letter-spacing: -0.5px;
   }
 
   .destacado-contenido h2 a {
+    color: var(--editorial-ink);
     text-decoration: none;
-    color: inherit;
+    transition: color 0.15s ease;
   }
 
   .destacado-contenido h2 a:hover {
-    color: var(--uah-azul);
+    color: var(--editorial-gold);
   }
 
   .destacado-contenido .meta-info {
-    color: #555;
-    font-size: 0.95rem;
-    margin-bottom: 15px;
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.85rem;
+    color: var(--editorial-muted);
+    margin-bottom: 16px;
   }
 
   .resumen {
+    font-family: var(--editorial-font-body);
     font-size: 1.1rem;
-    line-height: 1.6;
-    color: #444;
-    margin-bottom: 20px;
+    line-height: 1.65;
+    color: #374151;
+    margin-bottom: 24px;
   }
 
   .leer-mas {
     display: inline-block;
-    background: var(--uah-azul);
-    color: white;
-    padding: 10px 24px;
-    text-decoration: none;
+    background: var(--editorial-navy);
+    color: #ffffff;
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.82rem;
     font-weight: 700;
-    font-family: var(--fuente-sans);
-    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 26px;
+    text-decoration: none;
     align-self: flex-start;
-    transition: background 0.2s;
+    transition: background-color 0.15s ease;
   }
 
   .leer-mas:hover {
-    background: var(--uah-amarillo);
-    color: var(--uah-azul);
+    background: var(--editorial-gold);
+    color: #ffffff;
   }
 
-  /* ── Secundarios ─────────────────────────── */
+  /* ── Secundarios & Grid ──────────────────── */
   .titulo-seccion {
-    font-size: 1.5rem;
-    color: var(--uah-azul);
-    border-left: 4px solid var(--uah-amarillo);
-    padding-left: 15px;
-    margin-bottom: 25px;
+    font-family: var(--editorial-font-display);
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--editorial-ink);
+    border-left: none;
+    border-bottom: 1px solid var(--editorial-rule-dark);
+    padding-left: 0;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    letter-spacing: -0.2px;
   }
 
   .cuadricula-noticias {
@@ -254,19 +287,27 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
     gap: 25px;
   }
 
+  .secundarios {
+    border-bottom: 1px solid var(--editorial-hairline);
+    padding-bottom: 48px;
+    margin-bottom: 48px;
+  }
+
   /* ── Categorías ─────────────────────────── */
   .seccion-categoria {
-    margin-top: 50px;
+    border-bottom: 1px solid var(--editorial-hairline);
+    padding-bottom: 40px;
+    margin-top: 48px;
   }
 
   .sin-articulos-cat {
-    color: #666;
+    color: var(--editorial-muted);
     font-size: 1rem;
     margin-bottom: 15px;
   }
 
   .sin-articulos-cat a {
-    color: var(--uah-azul);
+    color: var(--editorial-navy);
     font-weight: 700;
     text-decoration: underline;
   }
@@ -274,16 +315,18 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
   .ver-mas {
     display: inline-block;
     margin-top: 20px;
-    font-family: var(--fuente-sans);
-    font-size: 0.9rem;
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.82rem;
     font-weight: 700;
-    color: var(--uah-azul);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--editorial-navy);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.15s ease;
   }
 
   .ver-mas:hover {
-    color: var(--uah-amarillo);
+    color: var(--editorial-gold);
   }
 
   /* ── Responsive ──────────────────────────── */
@@ -292,23 +335,28 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
       padding: 20px 15px;
     }
 
+    .destacado {
+      padding-bottom: 28px;
+      margin-bottom: 32px;
+    }
+
     .articulo-principal {
       grid-template-columns: 1fr;
-      gap: 0;
+      gap: 18px;
     }
 
     .destacado-imagen img {
-      border-right: none;
-      border-bottom: 4px solid var(--uah-amarillo);
-      height: 250px;
+      border: 1px solid var(--editorial-hairline);
+      height: auto;
+      aspect-ratio: 16 / 9;
     }
 
     .destacado-contenido {
-      padding: 25px 20px;
+      padding: 0;
     }
 
     .destacado-contenido h2 {
-      font-size: 1.6rem;
+      font-size: 1.65rem;
     }
 
     .cuadricula-noticias {

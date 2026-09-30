@@ -30,35 +30,36 @@
 
 ## Campos del artículo
 
-| Campo | Qué es | Requerido | Tips |
-|-------|--------|-----------|------|
-| Título | El nombre del artículo | Sí | Máximo 120 caracteres. Claro y atractivo. |
-| Categoría | La sección del periódico | Sí | Elegí UNA. Ver [Categorías](#categorías). |
-| Etiquetas | Temas específicos del artículo | No | Elegí hasta 5. Ver [Etiquetas](#etiquetas-tags). |
-| Autor | Quién escribió la nota | Sí | Podés poner tu nombre o "Redacción El Humboldtiano" |
-| Fecha de publicación | Cuándo aparece en el sitio | Sí | Elegí fecha y hora. El artículo no se publica automáticamente; es manual. |
-| Imagen de portada | Foto principal del artículo | No | Preferiblemente horizontal, buena calidad. |
-| Resumen | Breve descripción | No | Aparece en la portada y en Google. ¡Usalo! |
-| Destacado | ¿Va como artículo principal? | No | Solo UN artículo debería tener esto en "true". |
-| Estado | Etapa del artículo | Sí | Ver [Flujo editorial](#flujo-editorial). |
-| Cuerpo | El texto completo | Sí | Escribí en Markdown. Podés usar títulos, listas, negritas, citas. |
+| Campo                | Qué es                         | Requerido | Tips                                                                      |
+| -------------------- | ------------------------------ | --------- | ------------------------------------------------------------------------- |
+| Título               | El nombre del artículo         | Sí        | Máximo 120 caracteres. Claro y atractivo.                                 |
+| Categoría            | La sección del periódico       | Sí        | Elegí UNA. Ver [Categorías](#categorías).                                 |
+| Etiquetas            | Temas específicos del artículo | No        | Elegí hasta 5. Ver [Etiquetas](#etiquetas-tags).                          |
+| Autor                | Quién escribió la nota         | Sí        | Podés poner tu nombre o "Redacción El Humboldtiano"                       |
+| Fecha de publicación | Cuándo aparece en el sitio     | Sí        | Elegí fecha y hora. El artículo no se publica automáticamente; es manual. |
+| Imagen de portada    | Foto principal del artículo    | No        | Preferiblemente horizontal, buena calidad.                                |
+| Resumen              | Breve descripción              | No        | Aparece en la portada y en Google. ¡Usalo!                                |
+| Destacado            | ¿Va como artículo principal?   | No        | Solo UN artículo debería tener esto en "true".                            |
+| Estado               | Etapa del artículo             | Sí        | Ver [Flujo editorial](#flujo-editorial).                                  |
+| Cuerpo               | El texto completo              | Sí        | Escribí en Markdown. Podés usar títulos, listas, negritas, citas.         |
 
 ## Categorías
 
 Elegí UNA categoría por artículo.
 
-| Categoría | De qué se trata | Ejemplos |
-|-----------|-----------------|----------|
-| **Vida Universitaria** | Todo lo que pasa en la UAH: eventos, clases, clubes, deportes, emprendimientos estudiantiles. | Feria de emprendimiento, torneo deportivo, nuevo club. |
-| **Huellas** | Perfiles, venezolanos en el exterio e interior del pais. | Entrevista a un egresado exitoso, descubrimiento de una tesis. |
-| **Ciudad y Arte** | Cultura urbana, arte, teatro, cine, música, literatura en Caracas y Venezuela. | Reseña de una obra de teatro, mural nuevo en la ciudad. |
-| **En Radar** | Actualidad, tendencias, tecnología, economía, ciencia, noticias internacionales. | Nueva ley que afecta a estudiantes, avance científico relevante. |
+| Categoría              | De qué se trata                                                                               | Ejemplos                                                         |
+| ---------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| **Vida Universitaria** | Todo lo que pasa en la UAH: eventos, clases, clubes, deportes, emprendimientos estudiantiles. | Feria de emprendimiento, torneo deportivo, nuevo club.           |
+| **Huellas**            | Perfiles, venezolanos en el exterio e interior del pais.                                      | Entrevista a un egresado exitoso, descubrimiento de una tesis.   |
+| **Ciudad y Arte**      | Cultura urbana, arte, teatro, cine, música, literatura en Caracas y Venezuela.                | Reseña de una obra de teatro, mural nuevo en la ciudad.          |
+| **En Radar**           | Actualidad, tendencias, tecnología, economía, ciencia, noticias internacionales.              | Nueva ley que afecta a estudiantes, avance científico relevante. |
 
 ## Etiquetas (tags)
 
 Elegí hasta 5 etiquetas. Agrupalas por temática para que tengan sentido.
 
 ### Arte y cultura
+
 - **Música** — Conciertos, artistas, géneros, reseñas musicales.
 - **Cine** — Películas, festivales, reseñas cinematográficas.
 - **Arte Urbano** — Murales, grafiti, intervenciones en espacios públicos.
@@ -66,10 +67,12 @@ Elegí hasta 5 etiquetas. Agrupalas por temática para que tengan sentido.
 - **Literatura** — Libros, autores, reseñas literarias, poesía.
 
 ### Entretenimiento
+
 - **Videojuegos** — Lanzamientos, e-sports, cultura gamer.
 - **Indie** — Producciones independientes (cine, música, arte).
 
 ### Geografía y contexto
+
 - **Urbano** — Dinámicas de la ciudad, movilidad, espacios públicos.
 - **Caracas** — Notas específicas sobre la capital.
 - **Internacional** — Temas globales o de otros países.
@@ -78,6 +81,7 @@ Elegí hasta 5 etiquetas. Agrupalas por temática para que tengan sentido.
 - **Norteamérica** — Noticias o cultura de EE.UU. o Canadá.
 
 ### Vida académica
+
 - **Emprendimiento** — Proyectos estudiantiles, startups, negocios.
 - **Investigación** — Trabajos de investigación, tesis, papers.
 - **Egresados** — Historias y logros de exalumnos.
@@ -86,6 +90,7 @@ Elegí hasta 5 etiquetas. Agrupalas por temática para que tengan sentido.
 - **Deportes** — Eventos deportivos, atletas, competencias.
 
 ### Conocimiento general
+
 - **Ciencia** — Avances científicos, divulgación, tecnología aplicada.
 - **Economía** — Finanzas, mercado, política económica.
 - **Tecnología** — Gadgets, apps, inteligencia artificial, innovación.
@@ -104,6 +109,7 @@ Los artículos pasan por tres estados:
 ## Artículo destacado
 
 El campo **Destacado** hace que un artículo aparezca como principal en la portada.
+
 - Solo UN artículo debería estar destacado a la vez.
 - Si marcás uno nuevo como destacado, avisale al equipo para que desmarquen el anterior.
 - Usalo para la noticia más importante del momento.
@@ -111,16 +117,19 @@ El campo **Destacado** hace que un artículo aparezca como principal en la porta
 ## Estándares de contenido
 
 ### Tono
+
 - Periodístico, objetivo pero cercano.
 - Incluí citas y testimonios cuando sea posible.
 - Evitá el lenguaje excesivamente académico o, por el contrario, muy informal.
 
 ### Extensión
+
 - Notas cortas: 300–500 palabras.
 - Artículos medianos: 500–1.000 palabras.
 - Reportajes o entrevistas: 1.000–2.000 palabras.
 
 ### Imágenes
+
 - Usá imágenes propias o con permiso/licencia.
 - Preferiblemente horizontales (landscape) para la portada.
 - Nombrá los archivos descriptivamente: `feria-emprendimiento-2026.jpg`
@@ -145,6 +154,7 @@ En el campo "Imagen de portada" del CMS. Se guardan en `public/img/`.
 
 **¿Cómo pongo negritas, listas o títulos en el cuerpo?**
 El campo "Cuerpo" usa Markdown. Podés usar:
+
 - `# Título grande`, `## Subtítulo`
 - `**negrita**`
 - `- item de lista`

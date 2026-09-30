@@ -1,0 +1,36 @@
+/* ========================================
+   Tokens: Editorial Broadsheet Design System
+   WCAG 2.2 AA Compliant Editorial System
+   ======================================== */
+
+:root {
+  /* Broadsheet core palette */
+  --editorial-ink: #111827;
+  --editorial-navy: #0b2239;
+  --editorial-gold: #b45309;       /* Warm ochre (4.7:1 on #faf9f6) */
+  --editorial-paper: #faf9f6;      /* Off-white newsprint background */
+  --editorial-surface: #ffffff;    /* Clean card/content surface */
+  --editorial-hairline: #e5e3dc;   /* 1px physical broadsheet divider */
+  --editorial-rule-dark: #111827;  /* Heavy section divider */
+  --editorial-muted: #4b5563;      /* Muted metadata (>= 4.5:1 on paper) */
+  --editorial-focus-ring: rgba(11, 34, 57, 0.9);
+
+  /* Broadsheet typography */
+  --editorial-font-display: "Newsreader", "Playfair Display", Georgia, serif;
+  --editorial-font-kicker: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --editorial-font-body: "Merriweather", "Source Serif 4", Georgia, serif;
+
+  /* Aliased semantic mappings for base cascade */
+  --uah-azul: var(--editorial-navy);
+  --uah-amarillo: var(--editorial-gold);
+  --texto-oscuro: var(--editorial-ink);
+  --fondo-claro: var(--editorial-paper);
+  --fuente-serif: var(--editorial-font-body);
+  --fuente-sans: var(--editorial-font-kicker);
+
+  /* Modern surfaces (flat broadsheet, no 2010s floating shadows) */
+  --sombra-tarjeta: none;
+  --borde-tarjeta: 1px solid var(--editorial-hairline);
+  --borde-accento: 1px solid var(--editorial-hairline);
+  --focus-ring-color: var(--editorial-focus-ring);
+}

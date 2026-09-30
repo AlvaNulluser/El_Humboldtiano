@@ -1,12 +1,55 @@
 ---
-// Footer.astro — Pie de página centrado con copyright y enlaces sociales
+// Footer.astro — Pie de página centrado con copyright y enlaces editoriales
+import { EDITORIAL_CONFIG } from "../config/editorial";
 ---
 
 <footer class="pie-pagina" role="contentinfo">
-  <p>&copy; {new Date().getFullYear()} El Humboldtiano — Periódico Virtual UAH</p>
-  <p>Universidad Alejandro de Humboldt · Caracas, Venezuela</p>
+  <p>&copy; {new Date().getFullYear()} {EDITORIAL_CONFIG.name} — {EDITORIAL_CONFIG.tagline}</p>
+  <p>{EDITORIAL_CONFIG.institution} · {EDITORIAL_CONFIG.location}</p>
   <p><a href="/archivo/1">Archivo</a></p>
   <div class="social-links">
     <!-- Social links will be added when accounts are available -->
   </div>
 </footer>
+
+<style>
+  .pie-pagina {
+    background-color: var(--editorial-paper);
+    color: var(--editorial-muted);
+    border-top: 1px solid var(--editorial-hairline);
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 60px;
+  }
+
+  .pie-pagina p {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.82rem;
+    color: var(--editorial-muted);
+    opacity: 1;
+    margin: 6px 0;
+  }
+
+  .pie-pagina a {
+    color: var(--editorial-navy);
+    font-family: var(--editorial-font-kicker);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .pie-pagina a:hover {
+    color: var(--editorial-gold);
+  }
+
+  .pie-pagina .social-links a {
+    color: var(--editorial-navy);
+  }
+
+  .pie-pagina .social-links a:hover {
+    color: var(--editorial-gold);
+  }
+</style>

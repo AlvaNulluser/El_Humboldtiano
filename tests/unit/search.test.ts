@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { buildSearchIndex } from "../../src/utils/search";
 import type { ProcessedArticle } from "../../src/content/utils";
-import type { CollectionEntry } from "astro:content";
 
 /**
  * Minimal article factory that satisfies the ProcessedArticle shape
@@ -9,7 +8,7 @@ import type { CollectionEntry } from "astro:content";
  * are set to reasonable defaults or cast through `as unknown`.
  */
 function makeArticle(
-  overrides: Partial<Record<string, unknown>> = {},
+  overrides: Record<string, unknown> = {},
 ): ProcessedArticle {
   const base = {
     id: "test-1",
@@ -29,9 +28,9 @@ function makeArticle(
       status: "Listo",
     },
     ...overrides,
-  } as ProcessedArticle;
+  };
 
-  return base;
+  return base as unknown as ProcessedArticle;
 }
 
 describe("buildSearchIndex", () => {
@@ -73,9 +72,10 @@ describe("buildSearchIndex", () => {
   });
 
   it("falls back to empty string when resumen is missing", () => {
+    const defaultData = (makeArticle() as unknown as { data: Record<string, unknown> }).data;
     const article = makeArticle({
       data: {
-        ...(makeArticle() as unknown as Record<string, unknown>).data,
+        ...defaultData,
         resumen: undefined,
       },
     });
@@ -84,9 +84,10 @@ describe("buildSearchIndex", () => {
   });
 
   it("falls back to empty array when tags are missing", () => {
+    const defaultData = (makeArticle() as unknown as { data: Record<string, unknown> }).data;
     const article = makeArticle({
       data: {
-        ...(makeArticle() as unknown as Record<string, unknown>).data,
+        ...defaultData,
         tags: undefined,
       },
     });
