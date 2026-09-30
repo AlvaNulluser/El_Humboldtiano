@@ -2,8 +2,6 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
   resolveTheme,
   EDITORIAL_CONFIG,
-  type EditorialTheme,
-  type EditorialConfig,
 } from "../../src/config/editorial";
 
 describe("Editorial Theme Configuration & Resolution", () => {
