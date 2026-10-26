@@ -3,11 +3,37 @@
  * Single source of truth for name ↔ slug mapping.
  * Bijective: every name maps to exactly one slug and vice versa.
  */
-export const CATEGORIES: { name: string; slug: string }[] = [
-  { name: "Vida Universitaria", slug: "vida-universitaria" },
-  { name: "Huellas", slug: "huellas" },
-  { name: "Ciudad y Arte", slug: "ciudad-y-arte" },
-  { name: "En Radar", slug: "en-radar" },
+export interface CategoryDefinition {
+  name: string;
+  slug: string;
+  description: string;
+}
+
+export const CATEGORIES: CategoryDefinition[] = [
+  {
+    name: "Vida Universitaria",
+    slug: "vida-universitaria",
+    description:
+      "Acontecimientos del campus, proyectos académicos y vida estudiantil en la Universidad Alejandro de Humboldt.",
+  },
+  {
+    name: "Huellas",
+    slug: "huellas",
+    description:
+      "Crónicas, memoria histórica, testimonios y trayectoria de egresados y profesores de nuestra comunidad.",
+  },
+  {
+    name: "Ciudad y Arte",
+    slug: "ciudad-y-arte",
+    description:
+      "Cultura, expresiones artísticas, exposiciones, literatura y la movida urbana de Caracas y el país.",
+  },
+  {
+    name: "En Radar",
+    slug: "en-radar",
+    description:
+      "Tendencias, innovación, ciencia, tecnología y debates contemporáneos en el foco universitario.",
+  },
 ];
 
 /**

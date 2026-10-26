@@ -1,5 +1,5 @@
 ---
-// index.astro — Portada: 1 artículo destacado + 4 secundarios
+// index.astro — Portada: 1 artículo destacado + 4 secciones canónicas organizadas
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Nav from "../components/Nav.astro";
@@ -7,17 +7,20 @@ import Footer from "../components/Footer.astro";
 import ArticleCard from "../components/ArticleCard.astro";
 import { getArticles } from "../content/utils";
 import { CATEGORIES } from "../utils/slugify";
+import { organizeHomepageArticles } from "../utils/editorialLayout";
 import { Image } from "astro:assets";
 import fallbackImg from "../assets/image-pred.jpg";
 
 const articles = await getArticles();
-articles.sort(
-  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
-);
+const { featured, categories } = organizeHomepageArticles(articles, CATEGORIES);
 
-const featured =
-  articles.find((a) => a.data.destacado) || articles[0] || null;
-const secondary = articles.filter((a) => a !== featured).slice(0, 4);
+const formattedFeaturedDate = featured
+  ? featured.data.publishDate.toLocaleDateString("es-VE", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : "";
 
 const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
 ---
@@ -33,109 +36,135 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
           <h2>Próximamente</h2>
           <p>
             Nuestro equipo editorial está preparando los primeros artículos.
-            ¡Volvé pronto!
+            ¡Vuelve pronto!
           </p>
         </section>
       ) : (
         <>
-          {
-            featured && (
-              <section class="destacado">
-                <article class="articulo-principal">
-                  <div class="destacado-imagen">
-                    {
-                      featured.data.coverImage ? (
-                        <img
-                          src={featured.data.coverImage}
-                          alt={`Imagen del artículo: ${featured.data.title}`}
-                          width={800}
-                          height={450}
-                          loading="eager"
-                        />
-                      ) : (
-                        <Image
-                          src={fallbackImg}
-                          alt={`Imagen predeterminada del artículo: ${featured.data.title}`}
-                          width={800}
-                          height={450}
-                          quality={80}
-                          format="webp"
-                          loading="eager"
-                        />
-                      )
-                    }
-                  </div>
-                  <div class="destacado-contenido">
-                    <span class="etiqueta-categoria">
-                      {featured.data.category}
-                    </span>
-                    <h2>
-                      <a href={`/articulo/${featured.id}`}>
-                        {featured.data.title}
-                      </a>
-                    </h2>
-                    <p class="meta-info">
-                      Por {featured.data.author} &middot;{" "}
-                      {featured.readingTime} min de lectura
-                    </p>
-                    {featured.data.resumen && (
-                      <p class="resumen">{featured.data.resumen}</p>
-                    )}
-                    <a
-                      href={`/articulo/${featured.id}`}
-                      class="leer-mas"
-                      aria-label={`Leer artículo: ${featured.data.title}`}
-                    >
-                      Leer artículo completo &rarr;
+          {featured && (
+            <section class="destacado">
+              <article class="articulo-principal">
+                <div class="destacado-imagen">
+                  {featured.data.coverImage ? (
+                    <img
+                      src={featured.data.coverImage}
+                      alt={`Imagen del artículo: ${featured.data.title}`}
+                      width={800}
+                      height={450}
+                      loading="eager"
+                    />
+                  ) : (
+                    <Image
+                      src={fallbackImg}
+                      alt={`Imagen predeterminada del artículo: ${featured.data.title}`}
+                      width={800}
+                      height={450}
+                      quality={80}
+                      format="webp"
+                      loading="eager"
+                    />
+                  )}
+                </div>
+                <div class="destacado-contenido">
+                  <span class="etiqueta-categoria">
+                    {featured.data.category}
+                  </span>
+                  <h2>
+                    <a href={`/articulo/${featured.id}`}>
+                      {featured.data.title}
                     </a>
-                  </div>
-                </article>
-              </section>
-            )
-          }
-
-          {secondary.length > 0 && (
-            <section class="secundarios">
-              <h2 class="titulo-seccion">Más noticias</h2>
-              <div class="cuadricula-noticias">
-                {secondary.map((article) => (
-                  <ArticleCard article={article} />
-                ))}
-              </div>
+                  </h2>
+                  <p class="meta-info">
+                    Por {featured.data.author} &middot;{" "}
+                    <time datetime={featured.data.publishDate.toISOString()}>
+                      {formattedFeaturedDate}
+                    </time>{" "}
+                    &middot; {featured.readingTime} min de lectura
+                  </p>
+                  {featured.data.resumen && (
+                    <p class="resumen">{featured.data.resumen}</p>
+                  )}
+                  <a
+                    href={`/articulo/${featured.id}`}
+                    class="leer-mas"
+                    aria-label={`Leer artículo completo: ${featured.data.title}`}
+                  >
+                    Leer artículo completo &rarr;
+                  </a>
+                </div>
+              </article>
             </section>
           )}
 
-          <!-- Category sections -->
-          {CATEGORIES.map((cat) => {
-            const catArticles = articles
-              .filter((a) => a.data.category === cat.name)
-              .slice(0, 3);
-            return (
-              <section class="seccion-categoria">
-                <h2 class="titulo-seccion">{cat.name}</h2>
-                {catArticles.length > 0 ? (
-                  <>
-                    <div class="cuadricula-noticias">
-                      {catArticles.map((article) => (
-                        <ArticleCard article={article} />
-                      ))}
-                    </div>
-                  </>
+          {/* Secciones temáticas estructuradas del periódico */}
+          <div class="secciones-periodico">
+            {categories.map((cat) => (
+              <section class="seccion-categoria" id={cat.slug}>
+                <div class="categoria-header">
+                  <div class="categoria-titular">
+                    <h2 class="titulo-seccion">{cat.name}</h2>
+                    <p class="categoria-descripcion">{cat.description}</p>
+                  </div>
+                  <a
+                    href={`/categoria/${cat.slug}/1`}
+                    class="ver-mas"
+                    aria-label={`Ver sección ${cat.name}`}
+                  >
+                    Ver sección &rarr;
+                  </a>
+                </div>
+
+                {cat.articles.length > 0 ? (
+                  <div class="cuadricula-noticias">
+                    {cat.articles.map((article) => (
+                      <ArticleCard article={article} />
+                    ))}
+                  </div>
                 ) : (
-                  <p class="sin-articulos-cat">
-                    Próximamente — suscribite a nuestro{" "}
-                    <a href="/rss.xml">feed RSS</a>.
-                  </p>
+                  <div class="tarjeta-seccion-vacia">
+                    <div class="invitacion-contenido">
+                      <span class="etiqueta-invitacion">
+                        Espacio en Redacción
+                      </span>
+                      <p class="invitacion-texto">
+                        {featured && featured.data.category === cat.name
+                          ? `La historia principal de esta edición está destacada en portada. ¿Tienes un nuevo proyecto o testimonio para sumar a ${cat.name}?`
+                          : `Nuestra redacción está preparando las próximas notas de ${cat.name}. Si eres estudiante, profesor o egresado, puedes publicar aquí.`}
+                      </p>
+                    </div>
+                    <a
+                      href={`/categoria/${cat.slug}/1`}
+                      class="boton-invitacion"
+                    >
+                      Explorar sección
+                    </a>
+                  </div>
                 )}
-                <a
-                  href={`/categoria/${cat.slug}/1`}
-                  class="ver-mas"
-                >
-                  Ver más en {cat.name} &rarr;
-                </a>
               </section>
-            );
-          })}
+            ))}
+          </div>
+
+          {/* Cierre editorial comunitario */}
+          <section class="llamado-editorial">
+            <div class="llamado-contenido">
+              <span class="etiqueta-kicker">Comunidad Universitaria</span>
+              <h3>¿Quieres publicar en El Humboldtiano?</h3>
+              <p>
+                El periódico virtual está abierto a las voces de estudiantes,
+                profesores y egresados de la Universidad Alejandro de Humboldt.
+                Súmate al Club de Cultura y comparte tus crónicas,
+                investigaciones o columnas de opinión.
+              </p>
+              <div class="llamado-acciones">
+                <a href="/archivo/1" class="boton-editorial">
+                  Explorar Archivo
+                </a>
+                <a href="/rss.xml" class="boton-editorial">
+                  Canal RSS
+                </a>
+              </div>
+            </div>
+          </section>
         </>
       )
     }
@@ -239,6 +268,11 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
     margin-bottom: 16px;
   }
 
+  .destacado-contenido .meta-info time {
+    color: var(--editorial-ink);
+    font-weight: 600;
+  }
+
   .resumen {
     font-family: var(--editorial-font-body);
     font-size: 1.1rem;
@@ -267,18 +301,68 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
     color: #ffffff;
   }
 
-  /* ── Secundarios & Grid ──────────────────── */
-  .titulo-seccion {
+  /* ── Secciones Temáticas Estructuradas ──── */
+  .secciones-periodico {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .seccion-categoria {
+    border-bottom: 1px solid var(--editorial-hairline);
+    padding-bottom: 40px;
+  }
+
+  .categoria-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--editorial-rule-dark);
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    gap: 20px;
+  }
+
+  .categoria-titular {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .categoria-header .titulo-seccion {
     font-family: var(--editorial-font-display);
     font-size: 1.65rem;
     font-weight: 800;
     color: var(--editorial-ink);
-    border-left: none;
-    border-bottom: 1px solid var(--editorial-rule-dark);
-    padding-left: 0;
-    padding-bottom: 8px;
-    margin-bottom: 24px;
+    margin: 0;
+    padding: 0;
+    border: none;
     letter-spacing: -0.2px;
+  }
+
+  .categoria-descripcion {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.85rem;
+    color: var(--editorial-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .ver-mas {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--editorial-navy);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    white-space: nowrap;
+    padding-bottom: 2px;
+  }
+
+  .ver-mas:hover {
+    color: var(--editorial-gold);
   }
 
   .cuadricula-noticias {
@@ -287,46 +371,136 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
     gap: 25px;
   }
 
-  .secundarios {
-    border-bottom: 1px solid var(--editorial-hairline);
-    padding-bottom: 48px;
-    margin-bottom: 48px;
+  /* ── Tarjeta Sección en Redacción ────────── */
+  .tarjeta-seccion-vacia {
+    background: var(--editorial-surface);
+    border: 1px solid var(--editorial-hairline);
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
   }
 
-  /* ── Categorías ─────────────────────────── */
-  .seccion-categoria {
-    border-bottom: 1px solid var(--editorial-hairline);
-    padding-bottom: 40px;
-    margin-top: 48px;
+  .invitacion-contenido {
+    max-width: 780px;
   }
 
-  .sin-articulos-cat {
-    color: var(--editorial-muted);
-    font-size: 1rem;
-    margin-bottom: 15px;
-  }
-
-  .sin-articulos-cat a {
-    color: var(--editorial-navy);
-    font-weight: 700;
-    text-decoration: underline;
-  }
-
-  .ver-mas {
-    display: inline-block;
-    margin-top: 20px;
+  .etiqueta-invitacion {
     font-family: var(--editorial-font-kicker);
-    font-size: 0.82rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--editorial-gold);
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .invitacion-texto {
+    font-family: var(--editorial-font-body);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #4b5563;
+    margin: 0;
+  }
+
+  .boton-invitacion {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: var(--editorial-navy);
+    border: 1px solid var(--editorial-hairline);
+    background: var(--editorial-paper);
+    padding: 10px 18px;
     text-decoration: none;
-    transition: color 0.15s ease;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
   }
 
-  .ver-mas:hover {
+  .boton-invitacion:hover {
+    border-color: var(--editorial-navy);
+    color: var(--editorial-ink);
+    background: #ffffff;
+  }
+
+  /* ── Cierre Editorial ───────────────────── */
+  .llamado-editorial {
+    margin-top: 56px;
+    padding: 40px 24px;
+    background: var(--editorial-surface);
+    border: 1px solid var(--editorial-hairline);
+    border-top: 3px solid var(--editorial-navy);
+    text-align: center;
+  }
+
+  .llamado-contenido {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .etiqueta-kicker {
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.75rem;
+    font-weight: 700;
     color: var(--editorial-gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  .llamado-contenido h3 {
+    font-family: var(--editorial-font-display);
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    font-weight: 800;
+    color: var(--editorial-ink);
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+  }
+
+  .llamado-contenido p {
+    font-family: var(--editorial-font-body);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--editorial-muted);
+    margin: 0 0 24px 0;
+  }
+
+  .llamado-acciones {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .boton-editorial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--editorial-font-kicker);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--editorial-navy);
+    border: 1px solid var(--editorial-hairline);
+    background: var(--editorial-paper);
+    padding: 10px 22px;
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .boton-editorial:hover {
+    border-color: var(--editorial-navy);
+    color: var(--editorial-ink);
+    background: #ffffff;
   }
 
   /* ── Responsive ──────────────────────────── */
@@ -359,8 +533,31 @@ const pageTitle = "El Humboldtiano — Periódico Virtual UAH";
       font-size: 1.65rem;
     }
 
+    .categoria-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
     .cuadricula-noticias {
       grid-template-columns: 1fr;
+    }
+
+    .tarjeta-seccion-vacia {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 18px 16px;
+      gap: 16px;
+    }
+
+    .boton-invitacion {
+      width: 100%;
+      text-align: center;
+    }
+
+    .llamado-editorial {
+      padding: 28px 16px;
+      margin-top: 40px;
     }
   }
 </style>
